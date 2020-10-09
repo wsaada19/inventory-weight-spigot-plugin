@@ -22,8 +22,9 @@ public class SetWeightCommand extends SubCommand {
             return;
         }
 
-        if(Material.getMaterial(args[1]) == null){
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getNoPermission()));
+        String materialAllCaps = args[1].toUpperCase();
+        if(Material.getMaterial(materialAllCaps) == null){
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getInvalidMaterial()));
             return;
         }
 
