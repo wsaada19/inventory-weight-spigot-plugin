@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class AddItemEvent implements Listener {
@@ -29,9 +30,11 @@ public class AddItemEvent implements Listener {
             return;
         }
 
-        double weight = InventoryCheckUtil.getItemWeight(event.getItem().getItemStack().getType().toString());
+        ItemStack itemPickedUp = event.getItem().getItemStack();
 
-        double amount = (event.getItem().getItemStack().getAmount() * weight);
+        double weight = InventoryCheckUtil.getItemWeight(itemPickedUp.getType().toString(), itemPickedUp.getItemMeta().getDisplayName());
+
+        double amount = (itemPickedUp.getAmount() * weight);
 
         double itemCount = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents());
 

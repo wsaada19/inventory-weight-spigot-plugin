@@ -98,7 +98,7 @@ public class InventoryWeight extends JavaPlugin {
             double weight = getDoubleFromConfigValue(map.get("weight"));
             String itemName = (String)map.get("name");
 
-            InventoryCheckUtil.mapOfWeights.put(itemName,  weight);
+            InventoryCheckUtil.mapOfWeightsByDisplayName.put(itemName, weight);
         }
 
         PlayerWeight.initialize(disableMovement, capacity, minWeight, maxWeight, disableJump, jumpLimit);
@@ -129,7 +129,19 @@ public class InventoryWeight extends JavaPlugin {
             weightsToSave.add(map);
         }
 
-        getConfig().set("materialWeights", weightsToSave);
+        HashMap<String, Double> namedWeights = InventoryCheckUtil.mapOfWeightsByDisplayName;
+        Iterator nwIterator = namedWeights.entrySet().iterator();
+        List<LinkedHashMap<String, Object>> namedWeightsToSave = new ArrayList<LinkedHashMap<String, Object>>();
+
+        while(nwIterator.hasNext()){
+            Map.Entry element = (Map.Entry)nwIterator.next();
+            LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
+            map.put("name", element.getKey());
+            map.put("weight", element.getValue());
+            namedWeightsToSave.add(map);
+        }
+
+        getConfig().set("customItemWeights", namedWeightsToSave);
         saveConfig();
     }
 

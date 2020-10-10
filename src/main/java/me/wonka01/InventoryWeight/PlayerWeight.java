@@ -108,7 +108,7 @@ public class PlayerWeight {
     }
 
     public int getPercentage(){
-        double ratio =  (double)weight / (double) maxCapacity;
+        double ratio =  weight / (double) maxCapacity;
         int finalRatio =  (100 - (int)(ratio * 100.0));
         if(finalRatio < 0) {
             return 0;

@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -42,10 +43,10 @@ public class RemoveItemEvent implements Listener {
             list.remove(player.getUniqueId());
             return;
         }
+        ItemStack itemDropped = event.getItemDrop().getItemStack();
+        int amountDropped = itemDropped.getAmount();
 
-        int amountDropped = event.getItemDrop().getItemStack().getAmount();
-
-        double weight = InventoryCheckUtil.getItemWeight(event.getItemDrop().getItemStack().getType().toString());
+        double weight = InventoryCheckUtil.getItemWeight(itemDropped.getType().toString(), itemDropped.getItemMeta().getDisplayName());
 
         double oldWeight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()).getWeight();
 
