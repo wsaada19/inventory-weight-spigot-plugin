@@ -36,10 +36,14 @@ materialWeights:
     weight: 10
   - material: BROWN_MUSHROOM
     weight: 0.5
+  -material: WHEAT_SEEDS
+  - weight: 1.5
 
-#customItemWeights:
-  #- name: Diamond Sword of Doom
-    #weight: 20
+customItemWeights:
+  - name: Diamond Sword of Doom
+    weight: 20
+  - name: Wheat Seeds
+    weight: 10.5
 
 # If true a player will be notified each time their inventory weight changes
 showWeightChange: false

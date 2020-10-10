@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class InventoryCheckUtil {
 
     public static HashMap<String, Double> mapOfWeights = new HashMap<String, Double>();
+    public static HashMap<String, Double> mapOfWeightsByDisplayName = new HashMap<String, Double>();
     public static double defaultWeight;
 
     public static double getInventoryWeight(ItemStack[] items)
@@ -17,12 +18,16 @@ public class InventoryCheckUtil {
                 continue;
             }
             int stackSize = item.getAmount();
-            itemCount += (stackSize * getItemWeight(item.getType().toString()));
+            itemCount += (stackSize * getItemWeight(item.getType().toString(), item.getItemMeta().getDisplayName()));
         }
         return itemCount;
     }
 
-    public static double getItemWeight(String itemName){
+    public static double getItemWeight(String itemName, String displayName){
+        if(mapOfWeightsByDisplayName.containsKey(displayName))
+        {
+            return mapOfWeightsByDisplayName.get(displayName);
+        }
         if( mapOfWeights.containsKey(itemName)){
             return mapOfWeights.get(itemName);
         } else {

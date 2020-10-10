@@ -82,23 +82,37 @@ public class InventoryWeight extends JavaPlugin {
         float maxWeight = (float)getConfig().getDouble("maxWalkSpeed");
 
         List<?> matWeights = getConfig().getList("materialWeights");
+        List<?> nameWeights = getConfig().getList("customItemWeights");
+
         InventoryCheckUtil.defaultWeight = getConfig().getDouble("defaultWeight");
+
         for(Object item: matWeights){
             LinkedHashMap<?, ?> map = (LinkedHashMap)item;
-            double weight;
-
-            if(map.get("weight") instanceof Double)
-            {
-                weight = (Double)map.get("weight");
-            } else {
-                int tempInt = (Integer)map.get("weight");
-                weight = (double)tempInt;
-            }
+            double weight = getDoubleFromConfigValue(map.get("weight"));
             String upperCaseMaterial = ((String)map.get("material")).toUpperCase();
             InventoryCheckUtil.mapOfWeights.put(upperCaseMaterial,  weight);
         }
 
+        for(Object item: nameWeights){
+            LinkedHashMap<?, ?> map = (LinkedHashMap)item;
+            double weight = getDoubleFromConfigValue(map.get("weight"));
+            String itemName = (String)map.get("name");
+
+            InventoryCheckUtil.mapOfWeights.put(itemName,  weight);
+        }
+
         PlayerWeight.initialize(disableMovement, capacity, minWeight, maxWeight, disableJump, jumpLimit);
+    }
+
+    private double getDoubleFromConfigValue(Object weight)
+    {
+        if(weight instanceof Double)
+        {
+            return (Double)weight;
+        } else {
+            int tempInt = (Integer)weight;
+            return (double)tempInt;
+        }
     }
 
     private void saveConfiguration()
