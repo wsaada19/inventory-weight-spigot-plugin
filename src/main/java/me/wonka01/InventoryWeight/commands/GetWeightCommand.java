@@ -21,7 +21,7 @@ public class GetWeightCommand extends SubCommand {
             return;
         }
 
-        int weight = InventoryCheckUtil.getItemWeight(args[1]);
+        double weight = InventoryCheckUtil.getItemWeight(args[1]);
         player.sendMessage(ChatColor.translateAlternateColorCodes('&',LanguageConfig.getConfig().getMessages().getItemWeight() + " " + weight));
     }
 

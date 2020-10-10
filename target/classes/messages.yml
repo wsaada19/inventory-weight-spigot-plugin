@@ -2,7 +2,7 @@ noPermission: "&cYou do not have permission to perform this action!"
 invalidCommand: "&cInvalid command: use /iw help for a list of commands"
 invalidMaterial: "&cThe given material could not be found"
 # The weight is added to the end
-itemWeight: "&CItem weight is"
+itemWeight: "&eItem weight is"
 # The following strings are used when a player checks their weight
 weight: "&eWeight"
 speed: "&eSpeed"

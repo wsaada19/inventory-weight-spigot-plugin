@@ -19,21 +19,19 @@ public class PlayerWeight {
     private static boolean disableJump;
     private static int jumpLimit;
 
-    private int weight;
+    private double weight;
     private UUID playerId;
     private int maxCapacity;
 
-    public PlayerWeight(int weight, UUID id){
+    public PlayerWeight(double weight, UUID id){
         this.weight = weight;
         this.playerId = id;
         maxCapacity = defaultMaxCapacity;
 
-        Bukkit.getServer().getPlayer(id).removePotionEffect(PotionEffectType.JUMP);
-        Bukkit.getServer().getPlayer(id).removePotionEffect(PotionEffectType.SLOW);
         changeSpeed();
     }
 
-    public int getWeight(){return weight;}
+    public double getWeight(){return weight;}
 
     public void setMaxWeight(int max) {
         maxCapacity = max;
@@ -44,7 +42,7 @@ public class PlayerWeight {
         return maxCapacity;
     }
 
-    public void setWeight(int newWeight){
+    public void setWeight(double newWeight){
         weight = newWeight;
         changeSpeed();
     }
@@ -96,7 +94,7 @@ public class PlayerWeight {
 
     public String getSpeedDisplay(){
         String speedDisplay = "";
-        double ratio =  (double)weight / (double) maxCapacity;
+        double ratio =  weight / (double) maxCapacity;
         int result = 20 - (int)(ratio * 20.0);
         for(int i = 0; i < 20; i++){
             if(i < result){

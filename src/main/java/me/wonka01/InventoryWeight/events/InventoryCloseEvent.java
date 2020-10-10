@@ -27,7 +27,7 @@ public class InventoryCloseEvent implements Listener {
             return;
         }
 
-        int itemCount = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents());
+        double itemCount = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents());
 
         if(WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()) == null){
             WeightSingleton.getPlayerWeightMap().put(player.getUniqueId(), new PlayerWeight(itemCount, player.getUniqueId()));

@@ -17,7 +17,7 @@ public class SetWeightCommand extends SubCommand {
             return;
         }
 
-        if(args.length < 3 || !args[2].matches("-?\\d+")){
+        if(args.length < 3 || !args[2].matches("\\d+(\\.\\d{1,2})?")){
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getInvalidCommand()));
             return;
         }
@@ -28,12 +28,12 @@ public class SetWeightCommand extends SubCommand {
             return;
         }
 
-        int weight = Integer.parseInt(args[2]);
+        double weight = Double.parseDouble(args[2]);
         if(InventoryCheckUtil.mapOfWeights.containsKey(args[1])){
             InventoryCheckUtil.mapOfWeights.remove(args[1]);
         }
-        InventoryCheckUtil.mapOfWeights.put(args[1], weight);
-        player.sendMessage(ChatColor.GREEN + "Set the weight of " + args[1] + " to " + weight);
+        InventoryCheckUtil.mapOfWeights.put(materialAllCaps, weight);
+        player.sendMessage(ChatColor.GREEN + "Set the weight of " + materialAllCaps + " to " + weight);
     }
 
     @Override

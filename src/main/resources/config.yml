@@ -34,7 +34,8 @@ materialWeights:
     weight: 5
   - material: IRON_SWORD
     weight: 10
-  - material:
+  - material: BROWN_MUSHROOM
+    weight: 0.5
 
 #customItemWeights:
   #- name: Diamond Sword of Doom

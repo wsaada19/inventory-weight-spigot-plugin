@@ -82,18 +82,28 @@ public class InventoryWeight extends JavaPlugin {
         float maxWeight = (float)getConfig().getDouble("maxWalkSpeed");
 
         List<?> matWeights = getConfig().getList("materialWeights");
+        InventoryCheckUtil.defaultWeight = getConfig().getDouble("defaultWeight");
         for(Object item: matWeights){
             LinkedHashMap<?, ?> map = (LinkedHashMap)item;
-            InventoryCheckUtil.mapOfWeights.put((String)map.get("material"), (Integer) map.get("weight"));
+            double weight;
+
+            if(map.get("weight") instanceof Double)
+            {
+                weight = (Double)map.get("weight");
+            } else {
+                int tempInt = (Integer)map.get("weight");
+                weight = (double)tempInt;
+            }
+            String upperCaseMaterial = ((String)map.get("material")).toUpperCase();
+            InventoryCheckUtil.mapOfWeights.put(upperCaseMaterial,  weight);
         }
-        InventoryCheckUtil.defaultWeight = getConfig().getInt("defaultWeight");
 
         PlayerWeight.initialize(disableMovement, capacity, minWeight, maxWeight, disableJump, jumpLimit);
     }
 
     private void saveConfiguration()
     {
-        HashMap<String, Integer> weights = InventoryCheckUtil.mapOfWeights;
+        HashMap<String, Double> weights = InventoryCheckUtil.mapOfWeights;
         Iterator hmIterator = weights.entrySet().iterator();
         List<LinkedHashMap<String, Object>> weightsToSave = new ArrayList<LinkedHashMap<String, Object>>();
 

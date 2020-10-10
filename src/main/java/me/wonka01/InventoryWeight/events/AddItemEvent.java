@@ -29,17 +29,17 @@ public class AddItemEvent implements Listener {
             return;
         }
 
-        int weight = InventoryCheckUtil.getItemWeight(event.getItem().getItemStack().getType().toString());
+        double weight = InventoryCheckUtil.getItemWeight(event.getItem().getItemStack().getType().toString());
 
-        int amount = (event.getItem().getItemStack().getAmount() * weight);
+        double amount = (event.getItem().getItemStack().getAmount() * weight);
 
-        int itemCount = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents());
+        double itemCount = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents());
 
         if(WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()) == null){
             WeightSingleton.getPlayerWeightMap().put(player.getUniqueId(), new PlayerWeight(itemCount, player.getUniqueId()));
         }
 
-        int oldWeight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()).getWeight();
+        double oldWeight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()).getWeight();
 
 
         WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()).setWeight(oldWeight + amount);

@@ -35,7 +35,8 @@ public class InventoryWeightCommands implements CommandExecutor {
         if(!(sender instanceof Player)){return false;}
         Player player = (Player)sender;
         if(args.length < 1){
-            return false;
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',LanguageConfig.getConfig().getMessages().getHelpMessage()));
+            return true;
         }
         String sub = args[0];
 

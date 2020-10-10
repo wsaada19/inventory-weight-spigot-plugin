@@ -45,9 +45,9 @@ public class RemoveItemEvent implements Listener {
 
         int amountDropped = event.getItemDrop().getItemStack().getAmount();
 
-        int weight = InventoryCheckUtil.getItemWeight(event.getItemDrop().getItemStack().getType().toString());
+        double weight = InventoryCheckUtil.getItemWeight(event.getItemDrop().getItemStack().getType().toString());
 
-        int oldWeight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()).getWeight();
+        double oldWeight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()).getWeight();
 
 
         WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()).setWeight(oldWeight - (amountDropped * weight));

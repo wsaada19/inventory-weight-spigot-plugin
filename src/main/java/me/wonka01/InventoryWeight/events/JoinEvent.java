@@ -25,7 +25,7 @@ public class JoinEvent implements Listener {
         Set<PermissionAttachmentInfo> set = player.getEffectivePermissions();
         Iterator iterator = set.iterator();
 
-        int inventoryWeight = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents());
+        double inventoryWeight = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents());
 
         PlayerWeight playerData = new PlayerWeight(inventoryWeight, player.getUniqueId());
 
