@@ -48,8 +48,9 @@ public class InventoryWeight extends JavaPlugin {
                     Map.Entry element = (Map.Entry)hmIterator.next();
                     UUID playerId = (UUID) element.getKey();
                     PlayerWeight playerWeight = (PlayerWeight)element.getValue();
-                    playerWeight.setWeight(InventoryCheckUtil.getInventoryWeight(getServer().getPlayer(playerId).getInventory().getContents()));
-
+                    if(Bukkit.getServer().getPlayer(playerId).isOnline()){
+                        playerWeight.setWeight(InventoryCheckUtil.getInventoryWeight(getServer().getPlayer(playerId).getInventory().getContents()));
+                    }
                 }
             }
         },0L, (timer * 20));
