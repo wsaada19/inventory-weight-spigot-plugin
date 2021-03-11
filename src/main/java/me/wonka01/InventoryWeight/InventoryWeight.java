@@ -8,6 +8,8 @@ import me.wonka01.InventoryWeight.events.JoinEvent;
 import me.wonka01.InventoryWeight.events.RemoveItemEvent;
 import me.wonka01.InventoryWeight.util.InventoryWeightExpansion;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -48,8 +50,12 @@ public class InventoryWeight extends JavaPlugin {
                     Map.Entry element = (Map.Entry)hmIterator.next();
                     UUID playerId = (UUID) element.getKey();
                     PlayerWeight playerWeight = (PlayerWeight)element.getValue();
-                    if(Bukkit.getServer().getPlayer(playerId) != null && Bukkit.getServer().getPlayer(playerId).isOnline()){
-                        playerWeight.setWeight(InventoryCheckUtil.getInventoryWeight(getServer().getPlayer(playerId).getInventory().getContents()));
+                    Server server = getServer();
+                    if(server.getPlayer(playerId) != null ){
+                        Inventory inv = server.getPlayer(playerId).getInventory();
+                        if(inv != null){
+                            playerWeight.setWeight(InventoryCheckUtil.getInventoryWeight(inv.getContents()));
+                        }
                     }
                 }
             }
@@ -84,6 +90,7 @@ public class InventoryWeight extends JavaPlugin {
 
         List<?> matWeights = getConfig().getList("materialWeights");
         List<?> nameWeights = getConfig().getList("customItemWeights");
+        List<?> loreWeights = getConfig().getList("customLoreWeights");
 
         InventoryCheckUtil.defaultWeight = getConfig().getDouble("defaultWeight");
 
@@ -100,6 +107,14 @@ public class InventoryWeight extends JavaPlugin {
             String itemName = (String)map.get("name");
 
             InventoryCheckUtil.mapOfWeightsByDisplayName.put(itemName, weight);
+        }
+
+        for(Object item: loreWeights){
+            LinkedHashMap<?, ?> map = (LinkedHashMap)item;
+            double weight = getDoubleFromConfigValue(map.get("weight"));
+            String itemName = (String)map.get("name");
+
+            InventoryCheckUtil.mapOfWeightsByLore.put(itemName, weight);
         }
 
         PlayerWeight.initialize(disableMovement, capacity, minWeight, maxWeight, disableJump, jumpLimit);

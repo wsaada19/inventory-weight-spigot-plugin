@@ -15,7 +15,7 @@ disableJump: true
 jumpLimit: 500
 
 # Sets the walk speed when a player has an empty inventory(max) and when a player has weight greater than
-# or equal to the weight limit(min) (Note: .20 is the default walk speed in minecraft)
+# or equal to the weight limit(min) (Note: .20 is the default walk speed in Minecraft)
 # values must be between 1.0 and 0.0 and min speed must be less than max speed
 maxWalkSpeed: .30
 minWalkSpeed: .10
@@ -29,6 +29,8 @@ defaultWeight: 1
 
 # List of materials and their weights, if a material is not listed then it assumes the default value
 # list of materials can be found here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+
+# PRIORITY customItemWeights >> customLoreWeights >> materialWeights
 materialWeights:
   - material: IRON_PICKAXE
     weight: 5
@@ -41,9 +43,15 @@ materialWeights:
   - material: DIAMOND_SWORD
     weight: 5
 
+# Weight by item name
 customItemWeights:
   - name: Diamond Sword of Doom
     weight: 20
+
+# Weight by item lore
+customLoreWeights:
+  - name: This sword is verryyyyy heavy
+    weight: 50
 
 # If true a player will be notified each time their inventory weight changes
 showWeightChange: false

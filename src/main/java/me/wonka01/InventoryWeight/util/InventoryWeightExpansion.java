@@ -4,6 +4,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.wonka01.InventoryWeight.PlayerWeight;
 import me.wonka01.InventoryWeight.WeightSingleton;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 public class InventoryWeightExpansion extends PlaceholderExpansion {
 
@@ -24,7 +25,7 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
 
     @Override
     public String getVersion(){
-        return "1.0.0";
+        return "1.17";
     }
 
     @Override
@@ -45,6 +46,23 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
                 return String.valueOf(weight.getMaxWeight());
             }
             return String.valueOf(PlayerWeight.defaultMaxCapacity);
+        }
+
+        if(identifier.equals("speed")){
+            if(player.isOnline()){
+                Player onlinePlayer = (Player)player;
+                float speed = onlinePlayer.getWalkSpeed();
+                return String.valueOf(speed);
+            }
+            return "0.0";
+        }
+
+        if(identifier.equals("inventorybar")){
+            if(WeightSingleton.getPlayerWeightMap().containsKey(player.getUniqueId())){
+                PlayerWeight weight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId());
+                return weight.getSpeedDisplay();
+            }
+            return "";
         }
 
         // We return null if an invalid placeholder (f.e. %example_placeholder3%)

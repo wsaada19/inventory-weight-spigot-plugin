@@ -2,7 +2,7 @@ name: InventoryWeight
 version: 1.01
 author: Will
 main: me.wonka01.InventoryWeight.InventoryWeight
-api-version: 1.13
+api-version: 1.17
 
 commands:
   iw:
