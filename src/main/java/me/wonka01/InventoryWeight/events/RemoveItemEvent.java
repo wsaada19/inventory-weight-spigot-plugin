@@ -17,16 +17,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class RemoveItemEvent implements Listener {
-
-    ArrayList<UUID> list = new ArrayList<UUID>();
-
-    @EventHandler
-    public void onCommand(PlayerCommandPreprocessEvent event){
-        if(event.getMessage().contains("/give")){
-            list.add(event.getPlayer().getUniqueId());
-        }
-    }
-
     @EventHandler
     public void onEntityDropEvent(PlayerDropItemEvent event){
 
@@ -39,14 +29,10 @@ public class RemoveItemEvent implements Listener {
             return;
         }
 
-        if(list.contains(player.getUniqueId())){
-            list.remove(player.getUniqueId());
-            return;
-        }
         ItemStack itemDropped = event.getItemDrop().getItemStack();
         int amountDropped = itemDropped.getAmount();
 
-        double weight = InventoryCheckUtil.getItemWeight(itemDropped.getType().toString(), itemDropped.getItemMeta().getDisplayName());
+        double weight = InventoryCheckUtil.getItemWeight(itemDropped);
 
         double oldWeight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()).getWeight();
 

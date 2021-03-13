@@ -3,7 +3,6 @@ package me.wonka01.InventoryWeight;
 import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.commands.InventoryWeightCommands;
 import me.wonka01.InventoryWeight.events.AddItemEvent;
-import me.wonka01.InventoryWeight.events.InventoryCloseEvent;
 import me.wonka01.InventoryWeight.events.JoinEvent;
 import me.wonka01.InventoryWeight.events.RemoveItemEvent;
 import me.wonka01.InventoryWeight.util.InventoryWeightExpansion;
@@ -98,7 +97,7 @@ public class InventoryWeight extends JavaPlugin {
             LinkedHashMap<?, ?> map = (LinkedHashMap)item;
             double weight = getDoubleFromConfigValue(map.get("weight"));
             String upperCaseMaterial = ((String)map.get("material")).toUpperCase();
-            InventoryCheckUtil.mapOfWeights.put(upperCaseMaterial,  weight);
+            InventoryCheckUtil.mapOfWeightsByMaterial.put(upperCaseMaterial,  weight);
         }
 
         for(Object item: nameWeights){
@@ -133,7 +132,7 @@ public class InventoryWeight extends JavaPlugin {
 
     private void saveConfiguration()
     {
-        HashMap<String, Double> weights = InventoryCheckUtil.mapOfWeights;
+        HashMap<String, Double> weights = InventoryCheckUtil.mapOfWeightsByMaterial;
         Iterator hmIterator = weights.entrySet().iterator();
         List<LinkedHashMap<String, Object>> weightsToSave = new ArrayList<LinkedHashMap<String, Object>>();
 
@@ -165,7 +164,6 @@ public class InventoryWeight extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AddItemEvent(), this);
         getServer().getPluginManager().registerEvents(new RemoveItemEvent(), this);
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
-        getServer().getPluginManager().registerEvents(new InventoryCloseEvent(), this);
     }
 
     public void setUpMessageConfig(){
