@@ -1,9 +1,9 @@
 package me.wonka01.InventoryWeight.commands;
 
 import me.wonka01.InventoryWeight.configuration.LanguageConfig;
-import me.wonka01.InventoryWeight.InventoryCheckUtil;
+import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
+import me.wonka01.InventoryWeight.util.MaterialUtil;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 
@@ -22,17 +22,15 @@ public class SetWeightCommand extends SubCommand {
             return;
         }
 
-        String materialAllCaps = args[1].toUpperCase();
-        if(Material.getMaterial(materialAllCaps) == null){
+        if(!MaterialUtil.isMaterialValid(args[1])) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getInvalidMaterial()));
             return;
         }
+        String materialAllCaps = args[1].toUpperCase();
 
         double weight = Double.parseDouble(args[2]);
-        if(InventoryCheckUtil.mapOfWeights.containsKey(args[1])){
-            InventoryCheckUtil.mapOfWeights.remove(args[1]);
-        }
-        InventoryCheckUtil.mapOfWeights.put(materialAllCaps, weight);
+
+        InventoryCheckUtil.mapOfWeightsByMaterial.put(materialAllCaps, weight);
         player.sendMessage(ChatColor.GREEN + "Set the weight of " + materialAllCaps + " to " + weight);
     }
 

@@ -3,8 +3,12 @@ package me.wonka01.InventoryWeight;
 import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.commands.InventoryWeightCommands;
 import me.wonka01.InventoryWeight.events.AddItemEvent;
+import me.wonka01.InventoryWeight.events.FreezePlayerEvent;
 import me.wonka01.InventoryWeight.events.JoinEvent;
 import me.wonka01.InventoryWeight.events.RemoveItemEvent;
+import me.wonka01.InventoryWeight.playerweight.PlayerWeight;
+import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
+import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
 import me.wonka01.InventoryWeight.util.InventoryWeightExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -30,7 +34,7 @@ public class InventoryWeight extends JavaPlugin {
         commands.setup();
 
         loadConfig();
-        initializeLayers();
+        initConfig();
         setUpMessageConfig();
 
         BukkitScheduler scheduler = getServer().getScheduler();
@@ -42,7 +46,7 @@ public class InventoryWeight extends JavaPlugin {
         scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
             @Override
             public void run() {
-                HashMap<UUID, PlayerWeight> mapReference = WeightSingleton.getPlayerWeightMap();
+                HashMap<UUID, PlayerWeight> mapReference = PlayerWeightMap.getPlayerWeightMap();
                 Iterator hmIterator = mapReference.entrySet().iterator();
 
                 while(hmIterator.hasNext()){
@@ -72,17 +76,15 @@ public class InventoryWeight extends JavaPlugin {
         saveConfiguration();
     }
 
-    public void loadConfig() {
+    private void loadConfig() {
         getConfig().options().copyDefaults(true);
         saveConfig();
     }
 
-    public void initializeLayers(){
+    private void initConfig(){
 
         boolean disableMovement = getConfig().getBoolean("disableMovement");
-        boolean disableJump = getConfig().getBoolean("disableJump");
         int capacity = getConfig().getInt("weightLimit");
-        int jumpLimit = getConfig().getInt("jumpLimit");
 
         float minWeight = (float)getConfig().getDouble("minWalkSpeed");
         float maxWeight = (float)getConfig().getDouble("maxWalkSpeed");
@@ -116,7 +118,7 @@ public class InventoryWeight extends JavaPlugin {
             InventoryCheckUtil.mapOfWeightsByLore.put(itemName, weight);
         }
 
-        PlayerWeight.initialize(disableMovement, capacity, minWeight, maxWeight, disableJump, jumpLimit);
+        PlayerWeight.initialize(disableMovement, capacity, minWeight, maxWeight);
     }
 
     private double getDoubleFromConfigValue(Object weight)
@@ -157,25 +159,26 @@ public class InventoryWeight extends JavaPlugin {
         }
 
         getConfig().set("customItemWeights", namedWeightsToSave);
+        getConfig().set("materialWeights", weightsToSave);
         saveConfig();
     }
 
-    public void registerEvents(){
+    private void registerEvents(){
         getServer().getPluginManager().registerEvents(new AddItemEvent(), this);
         getServer().getPluginManager().registerEvents(new RemoveItemEvent(), this);
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
+        getServer().getPluginManager().registerEvents(new FreezePlayerEvent(), this);
     }
 
-    public void setUpMessageConfig(){
+    private void setUpMessageConfig(){
         showWeightChange = getConfig().getBoolean("showWeightChange");
-
         languageConfig = new LanguageConfig();
         languageConfig.setUpLanguageConfig();
     }
 
     public void reloadConfiguration(){
         reloadConfig();
-        initializeLayers();
+        initConfig();
     }
 
 }

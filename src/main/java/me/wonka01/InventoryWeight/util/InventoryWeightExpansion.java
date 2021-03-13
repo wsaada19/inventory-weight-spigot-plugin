@@ -1,8 +1,8 @@
 package me.wonka01.InventoryWeight.util;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.wonka01.InventoryWeight.PlayerWeight;
-import me.wonka01.InventoryWeight.WeightSingleton;
+import me.wonka01.InventoryWeight.playerweight.PlayerWeight;
+import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -32,8 +32,8 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, String identifier){
 
         if(identifier.equals("weight")){
-            if(WeightSingleton.getPlayerWeightMap().containsKey(player.getUniqueId())){
-                PlayerWeight weight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId());
+            if(PlayerWeightMap.getPlayerWeightMap().containsKey(player.getUniqueId())){
+                PlayerWeight weight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
                 return String.valueOf(weight.getWeight());
             }
             return "0";
@@ -41,8 +41,8 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
 
         // %example_placeholder2%
         if(identifier.equals("maxweight")){
-            if(WeightSingleton.getPlayerWeightMap().containsKey(player.getUniqueId())){
-                PlayerWeight weight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId());
+            if(PlayerWeightMap.getPlayerWeightMap().containsKey(player.getUniqueId())){
+                PlayerWeight weight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
                 return String.valueOf(weight.getMaxWeight());
             }
             return String.valueOf(PlayerWeight.defaultMaxCapacity);
@@ -58,8 +58,8 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
         }
 
         if(identifier.equals("inventorybar")){
-            if(WeightSingleton.getPlayerWeightMap().containsKey(player.getUniqueId())){
-                PlayerWeight weight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId());
+            if(PlayerWeightMap.getPlayerWeightMap().containsKey(player.getUniqueId())){
+                PlayerWeight weight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
                 return weight.getSpeedDisplay();
             }
             return "";

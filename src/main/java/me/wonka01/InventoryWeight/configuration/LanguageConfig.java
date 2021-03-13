@@ -39,12 +39,6 @@ public class LanguageConfig {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //yamlConfiguration.options().copyDefaults(true);
-        //saveDefault();
-    }
-
-    public void saveDefault() {
-        plugin.saveResource("messages.yml", false);
     }
 
     public MessagesModel getMessages()
@@ -68,11 +62,3 @@ public class LanguageConfig {
         config = this;
     }
 }
-//invalidCommand: "%CInvalid command, use /iw help for a list of commands"
-//        invalidMaterial: "%CThe given material could not be found"
-//        # The weight is added to the end
-//        itemWeight: "%CItem weight is"
-//        # The following strings are used when a player checks their weight
-//        weight: "&eWeight:"
-//        speed: "&eSpeed:"
-//        reloadCommand: "&AThe configuration has been reloaded successfully!"

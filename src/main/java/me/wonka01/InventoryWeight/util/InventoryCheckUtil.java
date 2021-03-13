@@ -1,10 +1,11 @@
-package me.wonka01.InventoryWeight;
+package me.wonka01.InventoryWeight.util;
 
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
 
+// TODO refactor into a Singleton class
 public class InventoryCheckUtil {
 
     public static HashMap<String, Double> mapOfWeightsByMaterial = new HashMap<String, Double>();

@@ -1,10 +1,9 @@
-package me.wonka01.InventoryWeight;
+package me.wonka01.InventoryWeight.playerweight;
 
+import me.wonka01.InventoryWeight.events.FreezePlayerEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
@@ -14,18 +13,17 @@ public class PlayerWeight {
     public static int defaultMaxCapacity;
     private static float minSpeed;
     private static float maxSpeed;
-    private static boolean disableJump;
-    private static int jumpLimit;
 
     private double weight;
     private UUID playerId;
     private int maxCapacity;
+    private boolean isDisableMovement;
 
     public PlayerWeight(double weight, UUID id){
         this.weight = weight;
         this.playerId = id;
         maxCapacity = defaultMaxCapacity;
-
+        isDisableMovement = false;
         changeSpeed();
     }
 
@@ -48,21 +46,14 @@ public class PlayerWeight {
     private void changeSpeed()
     {
         Player player = Bukkit.getServer().getPlayer(playerId);
-        if(player.hasPermission("inventoryweight.off")) {
-            return;
-        }
 
         if(weight > maxCapacity){
             handleMaxCapacity(player);
             return;
-        }
-
-        if(disableJump && weight > jumpLimit) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 250));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 250));
         } else {
-            player.removePotionEffect(PotionEffectType.JUMP);
-            player.removePotionEffect(PotionEffectType.SLOW);
+            if(isDisableMovement) {
+                FreezePlayerEvent.unfreezePlayer(playerId);
+            }
         }
 
         float weightRatio = (float)weight / (float)maxCapacity;
@@ -77,32 +68,29 @@ public class PlayerWeight {
 
     private void handleMaxCapacity(Player player)
     {
-        if(disableMovement){
-            player.setWalkSpeed(0);
+        if(disableMovement && !isDisableMovement){
+            player.sendMessage(ChatColor.RED + "You can't carry your weight anymore, you're going to need to drop some items!");
+            FreezePlayerEvent.freezePlayer(playerId);
+            isDisableMovement = true;
         } else {
             player.setWalkSpeed(minSpeed);
-        }
-
-        if(disableJump) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 250));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, Integer.MAX_VALUE, 250));
-
         }
     }
 
     public String getSpeedDisplay(){
-        String speedDisplay = "";
+        StringBuilder speedDisplay = new StringBuilder();
         double ratio =  weight / (double) maxCapacity;
         int result = 20 - (int)(ratio * 20.0);
         for(int i = 0; i < 20; i++){
             if(i < result){
-                speedDisplay += ChatColor.GREEN + "|";
+                speedDisplay.append(ChatColor.GREEN );
+                speedDisplay.append("|");
             } else {
-                speedDisplay += ChatColor.RED + "|";
+                speedDisplay.append(ChatColor.RED );
+                speedDisplay.append("|");
             }
         }
-        return speedDisplay;
-
+        return speedDisplay.toString();
     }
 
     public int getPercentage(){
@@ -115,13 +103,10 @@ public class PlayerWeight {
         }
     }
 
-    public static void initialize( boolean disableMovement, int capacity,
-                                   float min, float max, boolean disableJump, int jumpLimit){
+    public static void initialize( boolean disableMovement, int capacity, float min, float max){
         PlayerWeight.disableMovement = disableMovement;
         defaultMaxCapacity = capacity;
         minSpeed = min;
         maxSpeed = max;
-        PlayerWeight.disableJump = disableJump;
-        PlayerWeight.jumpLimit = jumpLimit;
     }
 }

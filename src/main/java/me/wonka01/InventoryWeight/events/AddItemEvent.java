@@ -1,10 +1,11 @@
 package me.wonka01.InventoryWeight.events;
 
-import me.wonka01.InventoryWeight.InventoryCheckUtil;
+import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
 import me.wonka01.InventoryWeight.InventoryWeight;
-import me.wonka01.InventoryWeight.PlayerWeight;
-import me.wonka01.InventoryWeight.WeightSingleton;
-import org.bukkit.*;
+import me.wonka01.InventoryWeight.playerweight.PlayerWeight;
+import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,11 +23,7 @@ public class AddItemEvent implements Listener {
 
         Player player = (Player)event.getEntity();
 
-        if(player.getGameMode().equals(GameMode.CREATIVE)) {
-            return;
-        }
-
-        if(player.hasPermission("inventoryweight.off")) {
+        if(player.getGameMode().equals(GameMode.CREATIVE) || player.hasPermission("inventoryweight.off")) {
             return;
         }
 
@@ -36,14 +33,14 @@ public class AddItemEvent implements Listener {
 
         double amount = (itemPickedUp.getAmount() * weight);
 
-        if(WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()) == null){
+        if(PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId()) == null){
             double totalWeight = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents());
-            WeightSingleton.getPlayerWeightMap().put(player.getUniqueId(), new PlayerWeight(totalWeight, player.getUniqueId()));
+            PlayerWeightMap.getPlayerWeightMap().put(player.getUniqueId(), new PlayerWeight(totalWeight, player.getUniqueId()));
         }
 
-        double oldWeight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()).getWeight();
+        double oldWeight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId()).getWeight();
 
-        WeightSingleton.getPlayerWeightMap().get(player.getUniqueId()).setWeight(oldWeight + amount);
+        PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId()).setWeight(oldWeight + amount);
         if(JavaPlugin.getPlugin(InventoryWeight.class).showWeightChange){
             player.sendMessage(ChatColor.RED + "Your weight has risen from " + oldWeight + " to " + (amount+oldWeight));
         }

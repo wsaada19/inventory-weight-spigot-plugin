@@ -1,20 +1,20 @@
-package me.wonka01.InventoryWeight;
+package me.wonka01.InventoryWeight.playerweight;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-public class WeightSingleton {
+public class PlayerWeightMap {
 
-    private static WeightSingleton instance = null;
+    private static PlayerWeightMap instance = null;
     public HashMap<UUID, PlayerWeight> weightMap;
 
-    private WeightSingleton(){
+    private PlayerWeightMap(){
         weightMap = new HashMap<UUID, PlayerWeight>();
     }
 
     public static HashMap<UUID, PlayerWeight> getPlayerWeightMap(){
         if(instance == null){
-            instance = new WeightSingleton();
+            instance = new PlayerWeightMap();
         }
         return instance.weightMap;
     }

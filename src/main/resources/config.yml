@@ -2,23 +2,14 @@
 # a higher value means there will be a higher variance in speed
 weightLimit: 500
 # If set to true, upon reaching [weightLimit], the player will be unable to walk
-# until their weight decreases. (Note: Player can still move by jumping)
+# until their weight decreases.
 disableMovement: true
-
-# Similar to disableMovement, disableJump will make it so a player can't jump if
-# they are above the weight limit
-disableJump: true
-
-# If disableJump is set to true, this value can be configured to set a limit
-# where jumping become disabled
-# Example: if jumpLimit is 100 and the player's weight is above 100 they will not be able to jump!
-jumpLimit: 500
 
 # Sets the walk speed when a player has an empty inventory(max) and when a player has weight greater than
 # or equal to the weight limit(min) (Note: .20 is the default walk speed in Minecraft)
 # values must be between 1.0 and 0.0 and min speed must be less than max speed
 maxWalkSpeed: .30
-minWalkSpeed: .10
+minWalkSpeed: .05
 
 # Time in seconds where the plugin will recalculate each player's weight
 # A lower number results in more frequent updates
@@ -30,7 +21,7 @@ defaultWeight: 1
 # List of materials and their weights, if a material is not listed then it assumes the default value
 # list of materials can be found here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 
-# PRIORITY customItemWeights >> customLoreWeights >> materialWeights
+# PRIORITY ORDER customItemWeights >> customLoreWeights >> materialWeights
 materialWeights:
   - material: IRON_PICKAXE
     weight: 5
@@ -54,4 +45,5 @@ customLoreWeights:
     weight: 50
 
 # If true a player will be notified each time their inventory weight changes
+# Don't recommend using - this is mostly for development
 showWeightChange: false
