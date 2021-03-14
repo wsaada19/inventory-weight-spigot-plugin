@@ -1,8 +1,8 @@
 package me.wonka01.InventoryWeight.commands;
 
 import me.wonka01.InventoryWeight.configuration.LanguageConfig;
-import me.wonka01.InventoryWeight.PlayerWeight;
-import me.wonka01.InventoryWeight.WeightSingleton;
+import me.wonka01.InventoryWeight.playerweight.PlayerWeight;
+import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -10,7 +10,12 @@ public class WeightCommand extends SubCommand  {
 
     @Override
     public void onCommand(Player player, String[] args) {
-        PlayerWeight playerWeight = WeightSingleton.getPlayerWeightMap().get(player.getUniqueId());
+
+        if(player.hasPermission("inventoryweight.off")) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getNoPermission()));
+            return;
+        }
+        PlayerWeight playerWeight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
 
         player.sendMessage(ChatColor.translateAlternateColorCodes('&',LanguageConfig.getConfig().getMessages().getWeight() + ": " + ChatColor.GREEN + playerWeight.getWeight() + ChatColor.WHITE + " / " + ChatColor.RED + playerWeight.getMaxWeight()));
         player.sendMessage(ChatColor.translateAlternateColorCodes('&',LanguageConfig.getConfig().getMessages().getSpeed() + ": " + ChatColor.GREEN + playerWeight.getPercentage() + "%"));

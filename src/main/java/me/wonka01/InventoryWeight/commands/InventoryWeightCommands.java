@@ -9,8 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class InventoryWeightCommands implements CommandExecutor {
@@ -25,7 +23,7 @@ public class InventoryWeightCommands implements CommandExecutor {
         subCommands = new HashMap<String, SubCommand>();
         subCommands.put("weight", new WeightCommand());
         subCommands.put("set", new SetWeightCommand());
-        subCommands.put("help", new InfoCommand());
+        subCommands.put("help", new HelpCommand());
         subCommands.put("get", new GetWeightCommand());
         subCommands.put("reload", new ReloadCommand());
     }
@@ -35,15 +33,12 @@ public class InventoryWeightCommands implements CommandExecutor {
         if(!(sender instanceof Player)){return false;}
         Player player = (Player)sender;
         if(args.length < 1){
-            return false;
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',LanguageConfig.getConfig().getMessages().getHelpMessage()));
+            return true;
         }
         String sub = args[0];
 
         if(subCommands.containsKey(sub)){
-            ArrayList<String> arrayList = new ArrayList<String>();
-
-            arrayList.addAll(Arrays.asList(args));
-            arrayList.remove(0);
             subCommands.get(sub).onCommand(player, args);
             return true;
         } else {

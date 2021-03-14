@@ -39,12 +39,6 @@ public class LanguageConfig {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //yamlConfiguration.options().copyDefaults(true);
-        //saveDefault();
-    }
-
-    public void saveDefault() {
-        plugin.saveResource("messages.yml", false);
     }
 
     public MessagesModel getMessages()
@@ -62,17 +56,13 @@ public class LanguageConfig {
         String speed = yamlConfiguration.getString("speed");
         String reloadCommand = yamlConfiguration.getString("reloadCommand");
         String helpMessage = yamlConfiguration.getString("helpMessage");
+        String cantMove = yamlConfiguration.getString("cantMoveMessage");
+        if(cantMove == null || cantMove.isEmpty()) {
+            cantMove = "&cYou can't carry your weight anymore, you're going to need to drop some items!";
+        }
 
         messages = new MessagesModel(noPermission, invalidCommand, invalidMaterial, itemWeight,
-                        weight, speed, reloadCommand, helpMessage);
+                        weight, speed, reloadCommand, helpMessage, cantMove);
         config = this;
     }
 }
-//invalidCommand: "%CInvalid command, use /iw help for a list of commands"
-//        invalidMaterial: "%CThe given material could not be found"
-//        # The weight is added to the end
-//        itemWeight: "%CItem weight is"
-//        # The following strings are used when a player checks their weight
-//        weight: "&eWeight:"
-//        speed: "&eSpeed:"
-//        reloadCommand: "&AThe configuration has been reloaded successfully!"
