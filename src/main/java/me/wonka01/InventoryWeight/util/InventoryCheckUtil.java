@@ -40,7 +40,7 @@ public class InventoryCheckUtil {
         } else if (mapOfWeightsByLore.containsKey(lore)){
             return mapOfWeightsByLore.get(lore);
         }
-        if( mapOfWeightsByMaterial.containsKey(type)){
+        if(mapOfWeightsByMaterial.containsKey(type)){
             return mapOfWeightsByMaterial.get(type);
         } else {
             return defaultWeight;

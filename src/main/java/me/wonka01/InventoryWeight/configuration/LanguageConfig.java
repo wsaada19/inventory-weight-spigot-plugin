@@ -56,9 +56,13 @@ public class LanguageConfig {
         String speed = yamlConfiguration.getString("speed");
         String reloadCommand = yamlConfiguration.getString("reloadCommand");
         String helpMessage = yamlConfiguration.getString("helpMessage");
+        String cantMove = yamlConfiguration.getString("cantMoveMessage");
+        if(cantMove == null || cantMove.isEmpty()) {
+            cantMove = "&cYou can't carry your weight anymore, you're going to need to drop some items!";
+        }
 
         messages = new MessagesModel(noPermission, invalidCommand, invalidMaterial, itemWeight,
-                        weight, speed, reloadCommand, helpMessage);
+                        weight, speed, reloadCommand, helpMessage, cantMove);
         config = this;
     }
 }

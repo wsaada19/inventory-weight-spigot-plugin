@@ -10,9 +10,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
-import java.util.Iterator;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class JoinEvent implements Listener {
 
@@ -42,9 +40,6 @@ public class JoinEvent implements Listener {
                 playerData.setMaxWeight(Integer.parseInt(amount));
             }
         }
-
-        event.getPlayer().sendMessage("Welcome!");
-        event.getPlayer().sendMessage("Your weight is " + inventoryWeight);
 
         PlayerWeightMap.getPlayerWeightMap().put(player.getUniqueId(), playerData);
     }

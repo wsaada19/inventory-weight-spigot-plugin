@@ -13,7 +13,7 @@ public class ReloadCommand extends SubCommand {
 
         if(!player.hasPermission("inventoryweight.reload"))
         {
-            player.sendMessage(LanguageConfig.getConfig().getMessages().getNoPermission());
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getNoPermission()));
             return;
         }
 

@@ -25,7 +25,7 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
 
     @Override
     public String getVersion(){
-        return "1.17";
+        return "1.2";
     }
 
     @Override
@@ -57,6 +57,15 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
             return "0.0";
         }
 
+        if(identifier.equals("weightPercentage")) {
+            if(PlayerWeightMap.getPlayerWeightMap().containsKey(player.getUniqueId())){
+                PlayerWeight weight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
+                double weightPercentage = weight.getWeight() / weight.getMaxWeight();
+                return (weightPercentage + "%");
+            }
+            return "0.0%";
+        }
+
         if(identifier.equals("inventorybar")){
             if(PlayerWeightMap.getPlayerWeightMap().containsKey(player.getUniqueId())){
                 PlayerWeight weight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
@@ -64,9 +73,6 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
             }
             return "";
         }
-
-        // We return null if an invalid placeholder (f.e. %example_placeholder3%)
-        // was provided
         return null;
     }
 }

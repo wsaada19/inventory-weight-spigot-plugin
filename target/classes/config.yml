@@ -22,6 +22,7 @@ defaultWeight: 1
 # list of materials can be found here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 
 # PRIORITY ORDER customItemWeights >> customLoreWeights >> materialWeights
+# example weight by material
 materialWeights:
   - material: IRON_PICKAXE
     weight: 5
@@ -39,11 +40,11 @@ customItemWeights:
   - name: Diamond Sword of Doom
     weight: 20
 
-# Weight by item lore
+# Example Weight by item lore
 customLoreWeights:
   - name: This sword is verryyyyy heavy
     weight: 50
 
 # If true a player will be notified each time their inventory weight changes
-# Don't recommend using - this is mostly for development
+# Don't recommend using - this is mostly for development purposes
 showWeightChange: false

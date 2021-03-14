@@ -7,5 +7,6 @@ itemWeight: "&eItem weight is"
 weight: "&eWeight"
 speed: "&eSpeed"
 reloadCommand: "&AThe configuration has been reloaded successfully!"
+cantMoveMessage: "&cYou can't carry your weight anymore, you're going to need to drop some items!"
 helpMessage: "&eThe inventory weight plugin keeps track of the items stored in a player's inventory.
               Each item has a specific weight value, to see your current weight use /iw weight"

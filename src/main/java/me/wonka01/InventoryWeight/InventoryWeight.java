@@ -146,19 +146,6 @@ public class InventoryWeight extends JavaPlugin {
             weightsToSave.add(map);
         }
 
-        HashMap<String, Double> namedWeights = InventoryCheckUtil.mapOfWeightsByDisplayName;
-        Iterator nwIterator = namedWeights.entrySet().iterator();
-        List<LinkedHashMap<String, Object>> namedWeightsToSave = new ArrayList<LinkedHashMap<String, Object>>();
-
-        while(nwIterator.hasNext()){
-            Map.Entry element = (Map.Entry)nwIterator.next();
-            LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
-            map.put("name", element.getKey());
-            map.put("weight", element.getValue());
-            namedWeightsToSave.add(map);
-        }
-
-        getConfig().set("customItemWeights", namedWeightsToSave);
         getConfig().set("materialWeights", weightsToSave);
         saveConfig();
     }

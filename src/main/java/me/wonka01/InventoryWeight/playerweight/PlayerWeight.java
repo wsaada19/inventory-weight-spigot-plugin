@@ -1,5 +1,6 @@
 package me.wonka01.InventoryWeight.playerweight;
 
+import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.events.FreezePlayerEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,13 +18,13 @@ public class PlayerWeight {
     private double weight;
     private UUID playerId;
     private int maxCapacity;
-    private boolean isDisableMovement;
+    private boolean isPlayerFrozen;
 
     public PlayerWeight(double weight, UUID id){
         this.weight = weight;
         this.playerId = id;
         maxCapacity = defaultMaxCapacity;
-        isDisableMovement = false;
+        isPlayerFrozen = false;
         changeSpeed();
     }
 
@@ -51,8 +52,9 @@ public class PlayerWeight {
             handleMaxCapacity(player);
             return;
         } else {
-            if(isDisableMovement) {
+            if(isPlayerFrozen) {
                 FreezePlayerEvent.unfreezePlayer(playerId);
+                isPlayerFrozen = false;
             }
         }
 
@@ -68,10 +70,10 @@ public class PlayerWeight {
 
     private void handleMaxCapacity(Player player)
     {
-        if(disableMovement && !isDisableMovement){
-            player.sendMessage(ChatColor.RED + "You can't carry your weight anymore, you're going to need to drop some items!");
+        if(disableMovement && !isPlayerFrozen){
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getCantMoveMessage()));
             FreezePlayerEvent.freezePlayer(playerId);
-            isDisableMovement = true;
+            isPlayerFrozen = true;
         } else {
             player.setWalkSpeed(minSpeed);
         }

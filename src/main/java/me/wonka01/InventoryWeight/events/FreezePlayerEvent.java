@@ -5,12 +5,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import java.util.ArrayList;
-import java.util.UUID;
-import java.util.List;
+import java.util.*;
 
 public class FreezePlayerEvent implements Listener {
-    private static List<UUID> playersOverWeightLimit = new ArrayList<UUID>();
+    private static Set<UUID> playersOverWeightLimit = new HashSet<UUID>();
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
@@ -27,10 +25,6 @@ public class FreezePlayerEvent implements Listener {
     }
 
     public static void unfreezePlayer(UUID id) {
-        for(UUID idInList: playersOverWeightLimit) {
-            if(idInList.equals(id)){
-                playersOverWeightLimit.remove(id);
-            }
-        }
+        playersOverWeightLimit.remove(id);
     }
 }
