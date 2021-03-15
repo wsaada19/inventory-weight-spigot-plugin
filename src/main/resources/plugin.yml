@@ -6,12 +6,9 @@ api-version: 1.13
 
 commands:
   iw:
-    usage: /iw [help, weight, set, get] are the available commands
+    usage: /iw [help, weight, get] are the available commands
 
 permissions:
-  inventoryweight.set:
-    description: The ability to set the weight of items
-    default: op
   inventoryweight.reload:
     description: Can use the reload command to update the configuration file
     default: op

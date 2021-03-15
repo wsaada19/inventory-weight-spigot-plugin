@@ -17,4 +17,4 @@ permissions:
     default: op
   inventoryweight.off:
     description: If this is set a player will not have their weight monitored or their speed changed
-    default: op
+    default: false

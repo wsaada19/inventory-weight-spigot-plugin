@@ -22,7 +22,6 @@ public class InventoryWeightCommands implements CommandExecutor {
         plugin.getCommand(main).setExecutor(this);
         subCommands = new HashMap<String, SubCommand>();
         subCommands.put("weight", new WeightCommand());
-        subCommands.put("set", new SetWeightCommand());
         subCommands.put("help", new HelpCommand());
         subCommands.put("get", new GetWeightCommand());
         subCommands.put("reload", new ReloadCommand());

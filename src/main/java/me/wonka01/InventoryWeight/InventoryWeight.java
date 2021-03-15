@@ -73,12 +73,10 @@ public class InventoryWeight extends JavaPlugin {
     public void onDisable(){
         getLogger().info("onDisable is called!");
         //Fired when server disables this plugin
-        saveConfiguration();
     }
 
     private void loadConfig() {
-        getConfig().options().copyDefaults(true);
-        saveConfig();
+        saveDefaultConfig();
     }
 
     private void initConfig(){
@@ -130,24 +128,6 @@ public class InventoryWeight extends JavaPlugin {
             int tempInt = (Integer)weight;
             return (double)tempInt;
         }
-    }
-
-    private void saveConfiguration()
-    {
-        HashMap<String, Double> weights = InventoryCheckUtil.mapOfWeightsByMaterial;
-        Iterator hmIterator = weights.entrySet().iterator();
-        List<LinkedHashMap<String, Object>> weightsToSave = new ArrayList<LinkedHashMap<String, Object>>();
-
-        while(hmIterator.hasNext()){
-            Map.Entry element = (Map.Entry)hmIterator.next();
-            LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
-            map.put("material", element.getKey());
-            map.put("weight", element.getValue());
-            weightsToSave.add(map);
-        }
-
-        getConfig().set("materialWeights", weightsToSave);
-        saveConfig();
     }
 
     private void registerEvents(){
