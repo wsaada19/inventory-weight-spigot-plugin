@@ -33,7 +33,7 @@ public class InventoryWeight extends JavaPlugin {
         commands = new InventoryWeightCommands();
         commands.setup();
 
-        loadConfig();
+        saveDefaultConfig();
         initConfig();
         setUpMessageConfig();
 
@@ -75,14 +75,11 @@ public class InventoryWeight extends JavaPlugin {
         //Fired when server disables this plugin
     }
 
-    private void loadConfig() {
-        saveDefaultConfig();
-    }
-
     private void initConfig(){
 
         boolean disableMovement = getConfig().getBoolean("disableMovement");
         int capacity = getConfig().getInt("weightLimit");
+        showWeightChange = getConfig().getBoolean("showWeightChange");
 
         float minWeight = (float)getConfig().getDouble("minWalkSpeed");
         float maxWeight = (float)getConfig().getDouble("maxWalkSpeed");
@@ -138,7 +135,6 @@ public class InventoryWeight extends JavaPlugin {
     }
 
     private void setUpMessageConfig(){
-        showWeightChange = getConfig().getBoolean("showWeightChange");
         languageConfig = new LanguageConfig();
         languageConfig.setUpLanguageConfig();
     }
