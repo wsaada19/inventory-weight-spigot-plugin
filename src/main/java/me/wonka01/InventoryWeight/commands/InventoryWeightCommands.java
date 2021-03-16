@@ -1,7 +1,7 @@
 package me.wonka01.InventoryWeight.commands;
 
-import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.InventoryWeight;
+import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,7 +17,7 @@ public class InventoryWeightCommands implements CommandExecutor {
     private HashMap<String, SubCommand> subCommands;
     private final String main = "iw";
 
-    public void setup(){
+    public void setup() {
 
         plugin.getCommand(main).setExecutor(this);
         subCommands = new HashMap<String, SubCommand>();
@@ -29,19 +29,21 @@ public class InventoryWeightCommands implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if(!(sender instanceof Player)){return false;}
-        Player player = (Player)sender;
-        if(args.length < 1){
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',LanguageConfig.getConfig().getMessages().getHelpMessage()));
+        if (!(sender instanceof Player)) {
+            return false;
+        }
+        Player player = (Player) sender;
+        if (args.length < 1) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getHelpMessage()));
             return true;
         }
         String sub = args[0];
 
-        if(subCommands.containsKey(sub)){
+        if (subCommands.containsKey(sub)) {
             subCommands.get(sub).onCommand(player, args);
             return true;
         } else {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',LanguageConfig.getConfig().getMessages().getInvalidCommand()));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getInvalidCommand()));
             return true;
         }
     }

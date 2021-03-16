@@ -8,12 +8,12 @@ public class PlayerWeightMap {
     private static PlayerWeightMap instance = null;
     public HashMap<UUID, PlayerWeight> weightMap;
 
-    private PlayerWeightMap(){
+    private PlayerWeightMap() {
         weightMap = new HashMap<UUID, PlayerWeight>();
     }
 
-    public static HashMap<UUID, PlayerWeight> getPlayerWeightMap(){
-        if(instance == null){
+    public static HashMap<UUID, PlayerWeight> getPlayerWeightMap() {
+        if (instance == null) {
             instance = new PlayerWeightMap();
         }
         return instance.weightMap;

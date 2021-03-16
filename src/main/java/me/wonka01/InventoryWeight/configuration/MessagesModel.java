@@ -14,8 +14,7 @@ public class MessagesModel {
 
 
     public MessagesModel(String noPermission, String invalidCommand, String invalidMaterial, String itemWeight,
-                         String weight, String speed, String reloadCommand, String helpMessage, String cantMoveMessage)
-    {
+                         String weight, String speed, String reloadCommand, String helpMessage, String cantMoveMessage) {
         this.noPermission = noPermission;
         this.invalidCommand = invalidCommand;
         this.invalidMaterial = invalidMaterial;
@@ -56,7 +55,11 @@ public class MessagesModel {
         return reloadCommand;
     }
 
-    public String getHelpMessage() {return helpMessage;}
+    public String getHelpMessage() {
+        return helpMessage;
+    }
 
-    public String getCantMoveMessage() {return cantMoveMessage;}
+    public String getCantMoveMessage() {
+        return cantMoveMessage;
+    }
 }

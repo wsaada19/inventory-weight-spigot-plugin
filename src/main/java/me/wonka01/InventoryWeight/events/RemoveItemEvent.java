@@ -1,8 +1,8 @@
 package me.wonka01.InventoryWeight.events;
 
-import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
 import me.wonka01.InventoryWeight.InventoryWeight;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
+import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -15,10 +15,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class RemoveItemEvent implements Listener {
     @EventHandler
-    public void onEntityDropEvent(PlayerDropItemEvent event){
+    public void onEntityDropEvent(PlayerDropItemEvent event) {
 
         Player player = event.getPlayer();
-        if(player.getGameMode().equals(GameMode.CREATIVE) || player.hasPermission("inventoryweight.off")) {
+        if (player.getGameMode().equals(GameMode.CREATIVE) || player.hasPermission("inventoryweight.off")) {
             return;
         }
 
@@ -32,7 +32,7 @@ public class RemoveItemEvent implements Listener {
 
         PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId()).setWeight(oldWeight - (amountDropped * weight));
 
-        if(JavaPlugin.getPlugin(InventoryWeight.class).showWeightChange){
+        if (JavaPlugin.getPlugin(InventoryWeight.class).showWeightChange) {
             player.sendMessage(ChatColor.GREEN + "Your weight has fallen from " + oldWeight + " to " + (oldWeight - (amountDropped * weight)));
         }
     }

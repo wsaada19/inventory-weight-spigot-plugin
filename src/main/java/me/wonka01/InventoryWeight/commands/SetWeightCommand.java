@@ -12,17 +12,17 @@ public class SetWeightCommand extends SubCommand {
     @Override
     public void onCommand(Player player, String[] args) {
 
-        if(!player.hasPermission("inventoryweight.set")){
+        if (!player.hasPermission("inventoryweight.set")) {
             player.sendMessage(LanguageConfig.getConfig().getMessages().getNoPermission());
             return;
         }
 
-        if(args.length < 3 || !args[2].matches("\\d+(\\.\\d{1,2})?")){
+        if (args.length < 3 || !args[2].matches("\\d+(\\.\\d{1,2})?")) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getInvalidCommand()));
             return;
         }
 
-        if(!MaterialUtil.isMaterialValid(args[1])) {
+        if (!MaterialUtil.isMaterialValid(args[1])) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getInvalidMaterial()));
             return;
         }

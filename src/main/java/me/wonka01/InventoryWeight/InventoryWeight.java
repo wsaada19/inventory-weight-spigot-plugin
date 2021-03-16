@@ -1,7 +1,7 @@
 package me.wonka01.InventoryWeight;
 
-import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.commands.InventoryWeightCommands;
+import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.events.AddItemEvent;
 import me.wonka01.InventoryWeight.events.FreezePlayerEvent;
 import me.wonka01.InventoryWeight.events.JoinEvent;
@@ -26,7 +26,7 @@ public class InventoryWeight extends JavaPlugin {
     public boolean showWeightChange;
 
     @Override
-    public void onEnable(){
+    public void onEnable() {
         getLogger().info("onEnable is called!");
         registerEvents();
 
@@ -39,7 +39,7 @@ public class InventoryWeight extends JavaPlugin {
 
         BukkitScheduler scheduler = getServer().getScheduler();
         int timer = getConfig().getInt("checkInventoryTime");
-        if(timer < 1){
+        if (timer < 1) {
             timer = 3;
         }
 
@@ -49,40 +49,40 @@ public class InventoryWeight extends JavaPlugin {
                 HashMap<UUID, PlayerWeight> mapReference = PlayerWeightMap.getPlayerWeightMap();
                 Iterator hmIterator = mapReference.entrySet().iterator();
 
-                while(hmIterator.hasNext()){
-                    Map.Entry element = (Map.Entry)hmIterator.next();
+                while (hmIterator.hasNext()) {
+                    Map.Entry element = (Map.Entry) hmIterator.next();
                     UUID playerId = (UUID) element.getKey();
-                    PlayerWeight playerWeight = (PlayerWeight)element.getValue();
+                    PlayerWeight playerWeight = (PlayerWeight) element.getValue();
                     Server server = getServer();
-                    if(server.getPlayer(playerId) != null ){
+                    if (server.getPlayer(playerId) != null) {
                         Inventory inv = server.getPlayer(playerId).getInventory();
-                        if(inv != null){
+                        if (inv != null) {
                             playerWeight.setWeight(InventoryCheckUtil.getInventoryWeight(inv.getContents()));
                         }
                     }
                 }
             }
-        },0L, (timer * 20));
+        }, 0L, (timer * 20));
 
-        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new InventoryWeightExpansion().register();
         }
     }
 
     @Override
-    public void onDisable(){
+    public void onDisable() {
         getLogger().info("onDisable is called!");
         //Fired when server disables this plugin
     }
 
-    private void initConfig(){
+    private void initConfig() {
 
         boolean disableMovement = getConfig().getBoolean("disableMovement");
         int capacity = getConfig().getInt("weightLimit");
         showWeightChange = getConfig().getBoolean("showWeightChange");
 
-        float minWeight = (float)getConfig().getDouble("minWalkSpeed");
-        float maxWeight = (float)getConfig().getDouble("maxWalkSpeed");
+        float minWeight = (float) getConfig().getDouble("minWalkSpeed");
+        float maxWeight = (float) getConfig().getDouble("maxWalkSpeed");
 
         List<?> matWeights = getConfig().getList("materialWeights");
         List<?> nameWeights = getConfig().getList("customItemWeights");
@@ -90,25 +90,25 @@ public class InventoryWeight extends JavaPlugin {
 
         InventoryCheckUtil.defaultWeight = getConfig().getDouble("defaultWeight");
 
-        for(Object item: matWeights){
-            LinkedHashMap<?, ?> map = (LinkedHashMap)item;
+        for (Object item : matWeights) {
+            LinkedHashMap<?, ?> map = (LinkedHashMap) item;
             double weight = getDoubleFromConfigValue(map.get("weight"));
-            String upperCaseMaterial = ((String)map.get("material")).toUpperCase();
-            InventoryCheckUtil.mapOfWeightsByMaterial.put(upperCaseMaterial,  weight);
+            String upperCaseMaterial = ((String) map.get("material")).toUpperCase();
+            InventoryCheckUtil.mapOfWeightsByMaterial.put(upperCaseMaterial, weight);
         }
 
-        for(Object item: nameWeights){
-            LinkedHashMap<?, ?> map = (LinkedHashMap)item;
+        for (Object item : nameWeights) {
+            LinkedHashMap<?, ?> map = (LinkedHashMap) item;
             double weight = getDoubleFromConfigValue(map.get("weight"));
-            String itemName = (String)map.get("name");
+            String itemName = (String) map.get("name");
 
             InventoryCheckUtil.mapOfWeightsByDisplayName.put(itemName, weight);
         }
 
-        for(Object item: loreWeights){
-            LinkedHashMap<?, ?> map = (LinkedHashMap)item;
+        for (Object item : loreWeights) {
+            LinkedHashMap<?, ?> map = (LinkedHashMap) item;
             double weight = getDoubleFromConfigValue(map.get("weight"));
-            String itemName = (String)map.get("name");
+            String itemName = (String) map.get("name");
 
             InventoryCheckUtil.mapOfWeightsByLore.put(itemName, weight);
         }
@@ -116,30 +116,28 @@ public class InventoryWeight extends JavaPlugin {
         PlayerWeight.initialize(disableMovement, capacity, minWeight, maxWeight);
     }
 
-    private double getDoubleFromConfigValue(Object weight)
-    {
-        if(weight instanceof Double)
-        {
-            return (Double)weight;
+    private double getDoubleFromConfigValue(Object weight) {
+        if (weight instanceof Double) {
+            return (Double) weight;
         } else {
-            int tempInt = (Integer)weight;
-            return (double)tempInt;
+            int tempInt = (Integer) weight;
+            return (double) tempInt;
         }
     }
 
-    private void registerEvents(){
+    private void registerEvents() {
         getServer().getPluginManager().registerEvents(new AddItemEvent(), this);
         getServer().getPluginManager().registerEvents(new RemoveItemEvent(), this);
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new FreezePlayerEvent(), this);
     }
 
-    private void setUpMessageConfig(){
+    private void setUpMessageConfig() {
         languageConfig = new LanguageConfig();
         languageConfig.setUpLanguageConfig();
     }
 
-    public void reloadConfiguration(){
+    public void reloadConfiguration() {
         reloadConfig();
         initConfig();
     }
