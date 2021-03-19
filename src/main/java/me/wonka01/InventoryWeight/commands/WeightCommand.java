@@ -17,8 +17,8 @@ public class WeightCommand extends SubCommand {
         }
         PlayerWeight playerWeight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
 
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getWeight() + ": " + ChatColor.GREEN + playerWeight.getWeight() + ChatColor.WHITE + " / " + ChatColor.RED + playerWeight.getMaxWeight()));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getSpeed() + ": " + ChatColor.GREEN + playerWeight.getPercentage() + "%"));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getWeight() + ": &a" + playerWeight.getWeight() + " &f / &c" + playerWeight.getMaxWeight()));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getSpeed() + ": &a" + playerWeight.getPercentage() + "%"));
         player.sendMessage(ChatColor.WHITE + "[" + playerWeight.getSpeedDisplay() + ChatColor.WHITE + "]");
     }
 

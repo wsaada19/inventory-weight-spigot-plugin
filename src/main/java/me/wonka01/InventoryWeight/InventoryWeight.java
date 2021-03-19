@@ -12,7 +12,9 @@ import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
 import me.wonka01.InventoryWeight.util.InventoryWeightExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -66,6 +68,31 @@ public class InventoryWeight extends JavaPlugin {
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new InventoryWeightExpansion().register();
+        }
+
+        // add all players to map
+        for(Player player : this.getServer().getOnlinePlayers()) {
+            if (player.hasPermission("inventoryweight.off")) {
+                return;
+            }
+
+            Set<PermissionAttachmentInfo> set = player.getEffectivePermissions();
+            Iterator iterator = set.iterator();
+
+            double inventoryWeight = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents());
+
+            PlayerWeight playerData = new PlayerWeight(inventoryWeight, player.getUniqueId());
+
+            while (iterator.hasNext()) {
+                PermissionAttachmentInfo info = (PermissionAttachmentInfo) iterator.next();
+
+                if (info.getPermission().contains("inventoryweight.maxweight.")) {
+                    String amount = info.getPermission().substring(26);
+                    playerData.setMaxWeight(Integer.parseInt(amount));
+                }
+            }
+
+            PlayerWeightMap.getPlayerWeightMap().put(player.getUniqueId(), playerData);
         }
     }
 
@@ -139,6 +166,7 @@ public class InventoryWeight extends JavaPlugin {
 
     public void reloadConfiguration() {
         reloadConfig();
+        setUpMessageConfig();
         initConfig();
     }
 
