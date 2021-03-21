@@ -4,6 +4,7 @@ import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.events.FreezePlayerEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -47,7 +48,14 @@ public class PlayerWeight {
     }
 
     private void changeSpeed() {
-        Player player = Bukkit.getServer().getPlayer(playerId);
+        Player player = Bukkit.getPlayer(playerId);
+        if(player == null) {
+            return;
+        }
+
+        if (player.hasPermission("inventoryweight.off") || player.getGameMode().equals(GameMode.CREATIVE)) {
+            return;
+        }
 
         if (weight > maxCapacity) {
             handleMaxCapacity(player);

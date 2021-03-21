@@ -1,8 +1,10 @@
 name: InventoryWeight
-version: 2.0
+version: 2.1
 author: Will
 main: me.wonka01.InventoryWeight.InventoryWeight
 api-version: 1.13
+
+softdepend: [PlaceholderAPI]
 
 commands:
   iw:

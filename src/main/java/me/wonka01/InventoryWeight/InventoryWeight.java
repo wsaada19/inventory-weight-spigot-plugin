@@ -116,30 +116,36 @@ public class InventoryWeight extends JavaPlugin {
         List<?> loreWeights = getConfig().getList("customLoreWeights");
 
         InventoryCheckUtil.defaultWeight = getConfig().getDouble("defaultWeight");
-
-        for (Object item : matWeights) {
-            LinkedHashMap<?, ?> map = (LinkedHashMap) item;
-            double weight = getDoubleFromConfigValue(map.get("weight"));
-            String upperCaseMaterial = ((String) map.get("material")).toUpperCase();
-            InventoryCheckUtil.mapOfWeightsByMaterial.put(upperCaseMaterial, weight);
+        if(matWeights != null) {
+            for (Object item : matWeights) {
+                LinkedHashMap<?, ?> map = (LinkedHashMap) item;
+                double weight = getDoubleFromConfigValue(map.get("weight"));
+                String upperCaseMaterial = ((String) map.get("material")).toUpperCase();
+                InventoryCheckUtil.mapOfWeightsByMaterial.put(upperCaseMaterial, weight);
+            }
         }
 
-        for (Object item : nameWeights) {
-            LinkedHashMap<?, ?> map = (LinkedHashMap) item;
-            double weight = getDoubleFromConfigValue(map.get("weight"));
-            String itemName = (String) map.get("name");
+        if(nameWeights != null) {
+            for (Object item : nameWeights) {
+                LinkedHashMap<?, ?> map = (LinkedHashMap) item;
+                double weight = getDoubleFromConfigValue(map.get("weight"));
+                String itemName = (String) map.get("name");
 
-            InventoryCheckUtil.mapOfWeightsByDisplayName.put(itemName, weight);
+                InventoryCheckUtil.mapOfWeightsByDisplayName.put(itemName, weight);
+            }
         }
 
-        for (Object item : loreWeights) {
-            LinkedHashMap<?, ?> map = (LinkedHashMap) item;
-            double weight = getDoubleFromConfigValue(map.get("weight"));
-            String itemName = (String) map.get("name");
+        if(loreWeights != null) {
+            for (Object item : loreWeights) {
+                LinkedHashMap<?, ?> map = (LinkedHashMap) item;
+                double weight = getDoubleFromConfigValue(map.get("weight"));
+                String itemName = (String) map.get("name");
 
-            InventoryCheckUtil.mapOfWeightsByLore.put(itemName, weight);
+                InventoryCheckUtil.mapOfWeightsByLore.put(itemName, weight);
+            }
         }
 
+        InventoryCheckUtil.loreTag = getConfig().getString("loreTag");
         PlayerWeight.initialize(disableMovement, capacity, minWeight, maxWeight);
     }
 

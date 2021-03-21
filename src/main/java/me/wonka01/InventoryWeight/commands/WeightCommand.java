@@ -4,6 +4,7 @@ import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeight;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 public class WeightCommand extends SubCommand {
@@ -11,7 +12,7 @@ public class WeightCommand extends SubCommand {
     @Override
     public void onCommand(Player player, String[] args) {
 
-        if (player.hasPermission("inventoryweight.off")) {
+        if (player.hasPermission("inventoryweight.off") || player.getGameMode().equals(GameMode.CREATIVE)) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getNoPermission()));
             return;
         }

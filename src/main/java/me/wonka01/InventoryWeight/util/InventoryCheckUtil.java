@@ -1,9 +1,12 @@
 package me.wonka01.InventoryWeight.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // TODO refactor into a Singleton class
 public class InventoryCheckUtil {
@@ -11,6 +14,7 @@ public class InventoryCheckUtil {
     public static HashMap<String, Double> mapOfWeightsByMaterial = new HashMap<String, Double>();
     public static HashMap<String, Double> mapOfWeightsByDisplayName = new HashMap<String, Double>();
     public static HashMap<String, Double> mapOfWeightsByLore = new HashMap<String, Double>();
+    public static String loreTag = "";
     public static double defaultWeight;
 
     public static double getInventoryWeight(ItemStack[] items) {
@@ -30,7 +34,10 @@ public class InventoryCheckUtil {
         String type = item.getType().toString();
         String lore = "";
         if (item.getItemMeta().hasLore()) {
-            lore = convertListToSingleString(item.getItemMeta().getLore());
+            double weight = getWeightFromTag(item.getItemMeta().getLore());
+            if(weight > 0) {
+                return weight;
+            }
         }
 
         if (mapOfWeightsByDisplayName.containsKey(name)) {
@@ -43,6 +50,20 @@ public class InventoryCheckUtil {
         } else {
             return defaultWeight;
         }
+    }
+
+    public static double getWeightFromTag(List<String> lore) {
+        double weight = -1;
+        for(String line : lore) {
+            if(line.contains(loreTag)) {
+                Pattern pattern = Pattern.compile("(?<!&)-?\\d+(?:\\.\\d+)?");
+                Matcher matcher = pattern.matcher(line);
+                if(matcher.find()){
+                    weight = Double.parseDouble(matcher.group(0));
+                }
+            }
+        }
+        return weight;
     }
 
     public static String convertListToSingleString(List<String> lore) {
