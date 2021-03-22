@@ -2,6 +2,7 @@ package me.wonka01.InventoryWeight.playerweight;
 
 import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.events.FreezePlayerEvent;
+import me.wonka01.InventoryWeight.util.WorldList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -49,11 +50,8 @@ public class PlayerWeight {
 
     private void changeSpeed() {
         Player player = Bukkit.getPlayer(playerId);
-        if(player == null) {
-            return;
-        }
 
-        if (player.hasPermission("inventoryweight.off") || player.getGameMode().equals(GameMode.CREATIVE)) {
+        if(isPluginDisabledForUserOrWorld(player)) {
             return;
         }
 
@@ -75,6 +73,21 @@ public class PlayerWeight {
             weightFloat = maxSpeed;
         }
         player.setWalkSpeed(weightFloat);
+    }
+
+    private boolean isPluginDisabledForUserOrWorld(Player player) {
+        WorldList worldList = WorldList.getInstance();
+        if(player == null) {
+            return true;
+        } else if(player.hasPermission("inventoryweight.off")) {
+            return true;
+        } else if( player.getGameMode().equals(GameMode.CREATIVE)) {
+            return true;
+        } else if(!(worldList.isInventoryWeightEnabled(player.getWorld().getName()))) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void handleMaxCapacity(Player player) {

@@ -3,25 +3,19 @@ package me.wonka01.InventoryWeight.events;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeight;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
 import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
-import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.*;
 
 public class JoinEvent implements Listener {
 
-    @EventHandler
-    public void playerJoinEvent(PlayerJoinEvent event) {
-
-        Player player = event.getPlayer();
-
+    public static void addPlayerToWeightMap(Player player) {
         Set<PermissionAttachmentInfo> set = player.getEffectivePermissions();
         Iterator iterator = set.iterator();
 
@@ -39,6 +33,13 @@ public class JoinEvent implements Listener {
         }
 
         PlayerWeightMap.getPlayerWeightMap().put(player.getUniqueId(), playerData);
+    }
+
+    @EventHandler
+    public void playerJoinEvent(PlayerJoinEvent event) {
+
+        Player player = event.getPlayer();
+        addPlayerToWeightMap(player);
     }
 
     @EventHandler
