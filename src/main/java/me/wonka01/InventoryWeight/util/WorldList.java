@@ -1,7 +1,5 @@
 package me.wonka01.InventoryWeight.util;
 
-import org.bukkit.Bukkit;
-
 import java.util.ArrayList;
 import java.util.List;
 

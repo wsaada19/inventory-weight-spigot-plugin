@@ -1,6 +1,5 @@
 package me.wonka01.InventoryWeight.util;
 
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
