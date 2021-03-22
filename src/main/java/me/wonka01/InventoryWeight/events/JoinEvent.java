@@ -1,8 +1,8 @@
 package me.wonka01.InventoryWeight.events;
 
-import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeight;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
+import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,15 +14,7 @@ import java.util.*;
 
 public class JoinEvent implements Listener {
 
-    @EventHandler
-    public void playerJoinEvent(PlayerJoinEvent event){
-
-        Player player = event.getPlayer();
-
-        if(player.hasPermission("inventoryweight.off")) {
-            return;
-        }
-
+    public static void addPlayerToWeightMap(Player player) {
         Set<PermissionAttachmentInfo> set = player.getEffectivePermissions();
         Iterator iterator = set.iterator();
 
@@ -30,12 +22,10 @@ public class JoinEvent implements Listener {
 
         PlayerWeight playerData = new PlayerWeight(inventoryWeight, player.getUniqueId());
 
-        while(iterator.hasNext())
-        {
+        while (iterator.hasNext()) {
             PermissionAttachmentInfo info = (PermissionAttachmentInfo) iterator.next();
 
-            if(info.getPermission().contains("inventoryweight.maxweight."))
-            {
+            if (info.getPermission().contains("inventoryweight.maxweight.")) {
                 String amount = info.getPermission().substring(26);
                 playerData.setMaxWeight(Integer.parseInt(amount));
             }
@@ -45,13 +35,17 @@ public class JoinEvent implements Listener {
     }
 
     @EventHandler
+    public void playerJoinEvent(PlayerJoinEvent event) {
+
+        Player player = event.getPlayer();
+        addPlayerToWeightMap(player);
+    }
+
+    @EventHandler
     public void playerLogoutEvent(PlayerQuitEvent event) {
-        if(event.getPlayer().hasPermission("inventoryweight.off")) {
-            return;
-        }
         UUID playerId = event.getPlayer().getUniqueId();
         PlayerWeightMap.getPlayerWeightMap().remove(playerId);
-        event.getPlayer().setWalkSpeed((float).2);
+        event.getPlayer().setWalkSpeed((float) .2);
     }
 
 }

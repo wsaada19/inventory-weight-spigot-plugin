@@ -1,20 +1,19 @@
 name: InventoryWeight
-version: 1.2
+version: 2.1
 author: Will
 main: me.wonka01.InventoryWeight.InventoryWeight
 api-version: 1.13
 
+softdepend: [PlaceholderAPI]
+
 commands:
   iw:
-    usage: /iw [help, weight, set, get] are the available commands
+    usage: /iw [help, weight, get] are the available commands
 
 permissions:
-  inventoryweight.set:
-    description: The ability to set the weight of items
-    default: op
   inventoryweight.reload:
     description: Can use the reload command to update the configuration file
     default: op
   inventoryweight.off:
     description: If this is set a player will not have their weight monitored or their speed changed
-    default: op
+    default: false
