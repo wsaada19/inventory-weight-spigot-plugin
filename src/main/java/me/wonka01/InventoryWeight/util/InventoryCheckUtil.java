@@ -55,7 +55,7 @@ public class InventoryCheckUtil {
         double weight = -1;
         for(String line : lore) {
             if(line.contains(loreTag)) {
-                Pattern pattern = Pattern.compile("(?<!&)-?\\d+(?:\\.\\d+)?");
+                Pattern pattern = Pattern.compile("(?<=\\s)-?\\d+(?:\\.\\d+)?");
                 Matcher matcher = pattern.matcher(line);
                 if(matcher.find()){
                     weight = Double.parseDouble(matcher.group(0));
