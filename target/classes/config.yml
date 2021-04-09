@@ -21,13 +21,16 @@ worlds:
 #  - world
 #  - otherWorldToEnable
 
+# if set to true only the armor slots will be counted for a player's weight
+armorOnly: true
+
 # Sets the default weight for all items not specified
 defaultWeight: 1
 
 # List of materials and their weights, if a material is not listed then it assumes the default value
 # list of materials can be found here: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
 
-# PRIORITY ORDER loreTags >> customItemWeights >> customLoreWeights >> materialWeights
+# PRIORITY ORDER loreTags >> customItemWeights >> materialWeights
 
 # You can add a custom "lore tag" to the lore of an item and this plugin will determine the weight.
 # In this example if you have a line in the item lore that says "Weight: 110", the weight for that

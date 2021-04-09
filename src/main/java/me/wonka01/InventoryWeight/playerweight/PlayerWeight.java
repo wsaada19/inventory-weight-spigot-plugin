@@ -31,7 +31,7 @@ public class PlayerWeight {
     }
 
     public double getWeight() {
-        return weight;
+        return Math.round(Math.round(weight * 100.0) / 100.0);
     }
 
     public void setMaxWeight(int max) {

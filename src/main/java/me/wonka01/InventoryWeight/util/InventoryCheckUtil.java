@@ -1,5 +1,6 @@
 package me.wonka01.InventoryWeight.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -13,18 +14,30 @@ public class InventoryCheckUtil {
     public static HashMap<String, Double> mapOfWeightsByMaterial = new HashMap<String, Double>();
     public static HashMap<String, Double> mapOfWeightsByDisplayName = new HashMap<String, Double>();
     public static HashMap<String, Double> mapOfWeightsByLore = new HashMap<String, Double>();
+    public static boolean armorOnlyMode = false;
     public static String loreTag = "";
     public static double defaultWeight;
 
     public static double getInventoryWeight(ItemStack[] items) {
         double totalWeight = 0;
-        for (ItemStack item : items) {
-            if (item == null) {
-                continue;
+        if(armorOnlyMode){
+            for(int i = 0; i < items.length; i++){
+                if (items[i] == null || (i < 36 || i > 40)) {
+                    continue;
+                }
+                int stackSize = items[i].getAmount();
+                totalWeight += (stackSize * getItemWeight(items[i]));
             }
-            int stackSize = item.getAmount();
-            totalWeight += (stackSize * getItemWeight(item));
+        } else {
+            for (ItemStack item : items) {
+                if (item == null) {
+                    continue;
+                }
+                int stackSize = item.getAmount();
+                totalWeight += (stackSize * getItemWeight(item));
+            }
         }
+
         return totalWeight;
     }
 
