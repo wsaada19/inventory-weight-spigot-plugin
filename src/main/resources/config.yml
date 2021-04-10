@@ -22,7 +22,7 @@ worlds:
 #  - otherWorldToEnable
 
 # if set to true only the armor slots will be counted for a player's weight
-armorOnly: true
+armorOnly: false
 
 # Sets the default weight for all items not specified
 defaultWeight: 1
