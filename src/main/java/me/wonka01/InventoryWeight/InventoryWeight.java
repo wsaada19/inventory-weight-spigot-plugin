@@ -87,6 +87,8 @@ public class InventoryWeight extends JavaPlugin {
         boolean disableMovement = getConfig().getBoolean("disableMovement");
         int capacity = getConfig().getInt("weightLimit");
         showWeightChange = getConfig().getBoolean("showWeightChange");
+        boolean armorOnly = getConfig().getBoolean("armorOnly");
+        InventoryCheckUtil.armorOnlyMode = armorOnly;
 
         float minWeight = (float) getConfig().getDouble("minWalkSpeed");
         float maxWeight = (float) getConfig().getDouble("maxWalkSpeed");

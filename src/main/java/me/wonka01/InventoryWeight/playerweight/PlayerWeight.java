@@ -31,7 +31,7 @@ public class PlayerWeight {
     }
 
     public double getWeight() {
-        return weight;
+        return Math.round(Math.round(weight * 100.0) / 100.0);
     }
 
     public void setMaxWeight(int max) {
@@ -52,6 +52,7 @@ public class PlayerWeight {
         Player player = Bukkit.getPlayer(playerId);
 
         if(isPluginDisabledForUserOrWorld(player)) {
+            player.setWalkSpeed(0.20f);
             return;
         }
 
