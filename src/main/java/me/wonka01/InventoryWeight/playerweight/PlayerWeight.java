@@ -52,6 +52,7 @@ public class PlayerWeight {
         Player player = Bukkit.getPlayer(playerId);
 
         if(isPluginDisabledForUserOrWorld(player)) {
+            player.setWalkSpeed(0.20f);
             return;
         }
 

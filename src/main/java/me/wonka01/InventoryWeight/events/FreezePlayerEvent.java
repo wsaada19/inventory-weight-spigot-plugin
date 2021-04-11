@@ -1,5 +1,6 @@
 package me.wonka01.InventoryWeight.events;
 
+import me.wonka01.InventoryWeight.util.WorldList;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,6 +15,10 @@ public class FreezePlayerEvent implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
+        if(!WorldList.getInstance().isInventoryWeightEnabled(e.getPlayer().getWorld().toString())){
+            return;
+        }
+
         if (playersOverWeightLimit.contains(e.getPlayer().getUniqueId())) {
             if (e.getFrom().getX() != e.getTo().getX() || e.getFrom().getY() != e.getTo().getY() || e.getFrom().getZ() != e.getTo().getZ()) {
                 Location loc = e.getFrom();
