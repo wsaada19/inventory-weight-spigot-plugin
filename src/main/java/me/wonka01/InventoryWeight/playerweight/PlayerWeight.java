@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
+import java.text.DecimalFormat;
 import java.util.UUID;
 
 public class PlayerWeight {
@@ -31,7 +32,8 @@ public class PlayerWeight {
     }
 
     public double getWeight() {
-        return Math.round(Math.round(weight * 100.0) / 100.0);
+        DecimalFormat priceFormatter = new DecimalFormat("#0.00"); //setting the format
+        return Double.parseDouble(priceFormatter.format(weight));
     }
 
     public void setMaxWeight(int max) {
