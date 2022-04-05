@@ -76,12 +76,4 @@ public class InventoryCheckUtil {
         }
         return weight;
     }
-
-    public static String convertListToSingleString(List<String> lore) {
-        StringBuilder builder = new StringBuilder();
-        for (String element : lore) {
-            builder.append(element);
-        }
-        return builder.toString();
-    }
 }

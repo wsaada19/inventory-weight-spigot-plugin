@@ -8,6 +8,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
+import java.text.DecimalFormat;
+
 public class WeightCommand extends SubCommand {
 
     @Override
@@ -18,8 +20,9 @@ public class WeightCommand extends SubCommand {
             return;
         }
         PlayerWeight playerWeight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
-
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getWeight() + ": &a" + playerWeight.getWeight() + " &f / &c" + playerWeight.getMaxWeight()));
+        DecimalFormat decimalFormatter = new DecimalFormat("#0.00"); //setting the format
+        String roundedWeight = decimalFormatter.format(playerWeight.getWeight());
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getWeight() + ": &a" + roundedWeight + " &f / &c" + playerWeight.getMaxWeight()));
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getSpeed() + ": &a" + playerWeight.getPercentage() + "%"));
         player.sendMessage(ChatColor.WHITE + "[" + playerWeight.getSpeedDisplay() + ChatColor.WHITE + "]");
     }
