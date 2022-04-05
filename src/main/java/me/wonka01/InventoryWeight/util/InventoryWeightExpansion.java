@@ -6,6 +6,8 @@ import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.text.DecimalFormat;
+
 public class InventoryWeightExpansion extends PlaceholderExpansion {
 
     @Override
@@ -25,7 +27,7 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return "1.2";
+        return "2.16";
     }
 
     @Override
@@ -34,12 +36,13 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
         if (identifier.equals("weight")) {
             if (PlayerWeightMap.getPlayerWeightMap().containsKey(player.getUniqueId())) {
                 PlayerWeight weight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
-                return String.valueOf(weight.getWeight());
+                DecimalFormat decimalFormatter = new DecimalFormat("#0.00"); //setting the format
+
+                return decimalFormatter.format(weight.getWeight());
             }
             return "0";
         }
 
-        // %example_placeholder2%
         if (identifier.equals("maxweight")) {
             if (PlayerWeightMap.getPlayerWeightMap().containsKey(player.getUniqueId())) {
                 PlayerWeight weight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
@@ -60,8 +63,9 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
         if (identifier.equals("weightPercentage")) {
             if (PlayerWeightMap.getPlayerWeightMap().containsKey(player.getUniqueId())) {
                 PlayerWeight weight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
-                double weightPercentage = weight.getWeight() / weight.getMaxWeight();
-                return (weightPercentage + "%");
+                double weightPercentage = (weight.getWeight() / weight.getMaxWeight()) * 100;
+                DecimalFormat decimalFormatter = new DecimalFormat("#0.00");
+                return decimalFormatter.format(weightPercentage) + "%";
             }
             return "0.0%";
         }

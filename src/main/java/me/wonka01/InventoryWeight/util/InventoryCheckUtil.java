@@ -1,6 +1,5 @@
 package me.wonka01.InventoryWeight.util;
 
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -26,7 +25,7 @@ public class InventoryCheckUtil {
                     continue;
                 }
                 int stackSize = items[i].getAmount();
-                totalWeight += (stackSize * getItemWeight(items[i]));
+                totalWeight += ((double)stackSize * getItemWeight(items[i]));
             }
         } else {
             for (ItemStack item : items) {
@@ -34,7 +33,7 @@ public class InventoryCheckUtil {
                     continue;
                 }
                 int stackSize = item.getAmount();
-                totalWeight += (stackSize * getItemWeight(item));
+                totalWeight += ((double)stackSize * getItemWeight(item));
             }
         }
 
@@ -76,13 +75,5 @@ public class InventoryCheckUtil {
             }
         }
         return weight;
-    }
-
-    public static String convertListToSingleString(List<String> lore) {
-        StringBuilder builder = new StringBuilder();
-        for (String element : lore) {
-            builder.append(element);
-        }
-        return builder.toString();
     }
 }

@@ -79,7 +79,6 @@ public class InventoryWeight extends JavaPlugin {
     @Override
     public void onDisable() {
         getLogger().info("onDisable is called!");
-        //Fired when server disables this plugin
     }
 
     private void initConfig() {

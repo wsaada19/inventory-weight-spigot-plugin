@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
-
 import java.util.UUID;
 
 public class PlayerWeight {
@@ -31,7 +30,7 @@ public class PlayerWeight {
     }
 
     public double getWeight() {
-        return Math.round(Math.round(weight * 100.0) / 100.0);
+        return weight;
     }
 
     public void setMaxWeight(int max) {
