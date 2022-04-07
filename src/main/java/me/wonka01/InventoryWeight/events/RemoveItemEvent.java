@@ -1,6 +1,7 @@
 package me.wonka01.InventoryWeight.events;
 
 import me.wonka01.InventoryWeight.InventoryWeight;
+import me.wonka01.InventoryWeight.playerweight.PlayerWeight;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
 import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
 import org.bukkit.ChatColor;
@@ -11,7 +12,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-
 
 public class RemoveItemEvent implements Listener {
     @EventHandler
@@ -27,8 +27,15 @@ public class RemoveItemEvent implements Listener {
 
         double weight = InventoryCheckUtil.getItemWeight(itemDropped);
 
-        double oldWeight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId()).getWeight();
+        PlayerWeight playerWeight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
 
+        if (playerWeight == null) {
+            double totalWeight = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents());
+            PlayerWeightMap.getPlayerWeightMap().put(player.getUniqueId(), new PlayerWeight(totalWeight, player.getUniqueId()));
+            return;
+        }
+
+        double oldWeight = playerWeight.getWeight();
 
         PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId()).setWeight(oldWeight - (amountDropped * weight));
 
