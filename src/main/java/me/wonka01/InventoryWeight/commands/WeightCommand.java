@@ -4,41 +4,37 @@ import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeight;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
 import me.wonka01.InventoryWeight.util.WorldList;
+import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
 
-public class WeightCommand extends SubCommand {
-
-    @Override
+public class WeightCommand implements SubCommand {
     public void onCommand(Player player, String[] args) {
         WorldList worldList = WorldList.getInstance();
-        if (player.hasPermission("inventoryweight.off") || player.getGameMode().equals(GameMode.CREATIVE) || !(worldList.isInventoryWeightEnabled(player.getWorld().getName()))) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getNoPermission()));
+        if (player.hasPermission("inventoryweight.off") || player.getGameMode().equals(GameMode.CREATIVE)
+                || !(worldList.isInventoryWeightEnabled(player.getWorld().getName()))) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    LanguageConfig.getConfig().getMessages().getNoPermission()));
             return;
         }
         PlayerWeight playerWeight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
-        DecimalFormat decimalFormatter = new DecimalFormat("#0.00"); //setting the format
+        DecimalFormat decimalFormatter = new DecimalFormat("#0.00"); // setting the format
         String roundedWeight = decimalFormatter.format(playerWeight.getWeight());
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getWeight() + ": &a" + roundedWeight + " &f / &c" + playerWeight.getMaxWeight()));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getSpeed() + ": &a" + playerWeight.getPercentage() + "%"));
+        player.sendMessage(
+                ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getWeight()
+                        + ": &a" + roundedWeight + " &f / &c"
+                        + (playerWeight.getMaxWeight())));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                LanguageConfig.getConfig().getMessages().getSpeed() + ": &a" + playerWeight.getPercentage() + "%"));
         player.sendMessage(ChatColor.WHITE + "[" + playerWeight.getSpeedDisplay() + ChatColor.WHITE + "]");
     }
 
-    @Override
-    public String name() {
-        return "weight";
+    public void onCommand(CommandSender sender, String[] args) {
+        throw new NotImplementedException();
     }
 
-    @Override
-    public String info() {
-        return "/iw weight";
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[0];
-    }
 }

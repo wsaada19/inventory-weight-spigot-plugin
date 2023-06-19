@@ -35,7 +35,8 @@ defaultWeight: 1
 # You can add a custom "lore tag" to the lore of an item and this plugin will determine the weight.
 # In this example if you have a line in the item lore that says "Weight: 110", the weight for that
 # item will be 110! The tag "Weight:" must be in the lore string for the plugin to pick it up.
-loreTag: "Weight:"
+loreTag: 'Weight:'
+capacityTag: 'Capacity:'
 
 # example weight by material
 materialWeights:

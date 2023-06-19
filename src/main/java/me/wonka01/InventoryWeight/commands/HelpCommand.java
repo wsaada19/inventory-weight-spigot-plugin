@@ -1,27 +1,19 @@
 package me.wonka01.InventoryWeight.commands;
 
 import me.wonka01.InventoryWeight.configuration.LanguageConfig;
+import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class HelpCommand extends SubCommand {
-    @Override
+public class HelpCommand implements SubCommand {
     public void onCommand(Player player, String[] args) {
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getHelpMessage()));
+        player.sendMessage(
+                ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getHelpMessage()));
     }
 
-    @Override
-    public String name() {
-        return "help";
+    public void onCommand(CommandSender sender, String[] args) {
+        throw new NotImplementedException();
     }
 
-    @Override
-    public String info() {
-        return "/iw help";
-    }
-
-    @Override
-    public String[] aliases() {
-        return new String[0];
-    }
 }

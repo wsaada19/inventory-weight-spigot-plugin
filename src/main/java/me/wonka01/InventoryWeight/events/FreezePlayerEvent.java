@@ -15,12 +15,13 @@ public class FreezePlayerEvent implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
-        if(!WorldList.getInstance().isInventoryWeightEnabled(e.getPlayer().getWorld().toString())){
+        if (!WorldList.getInstance().isInventoryWeightEnabled(e.getPlayer().getWorld().toString())) {
             return;
         }
 
         if (playersOverWeightLimit.contains(e.getPlayer().getUniqueId())) {
-            if (e.getFrom().getX() != e.getTo().getX() || e.getFrom().getY() != e.getTo().getY() || e.getFrom().getZ() != e.getTo().getZ()) {
+            if (e.getFrom().getX() != e.getTo().getX() || e.getFrom().getY() != e.getTo().getY()
+                    || e.getFrom().getZ() != e.getTo().getZ()) {
                 Location loc = e.getFrom();
                 e.getPlayer().teleport(loc.setDirection(e.getTo().getDirection()));
             }

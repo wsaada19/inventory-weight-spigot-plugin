@@ -27,7 +27,7 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return "2.16";
+        return "2.17";
     }
 
     @Override
@@ -36,7 +36,7 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
         if (identifier.equals("weight")) {
             if (PlayerWeightMap.getPlayerWeightMap().containsKey(player.getUniqueId())) {
                 PlayerWeight weight = PlayerWeightMap.getPlayerWeightMap().get(player.getUniqueId());
-                DecimalFormat decimalFormatter = new DecimalFormat("#0.00"); //setting the format
+                DecimalFormat decimalFormatter = new DecimalFormat("#0.00"); // setting the format
 
                 return decimalFormatter.format(weight.getWeight());
             }
@@ -80,4 +80,3 @@ public class InventoryWeightExpansion extends PlaceholderExpansion {
         return null;
     }
 }
-

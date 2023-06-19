@@ -6,7 +6,7 @@ import java.util.UUID;
 public class PlayerWeightMap {
 
     private static PlayerWeightMap instance = null;
-    public HashMap<UUID, PlayerWeight> weightMap;
+    private HashMap<UUID, PlayerWeight> weightMap;
 
     private PlayerWeightMap() {
         weightMap = new HashMap<UUID, PlayerWeight>();

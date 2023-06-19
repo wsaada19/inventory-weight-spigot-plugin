@@ -2,10 +2,8 @@ package me.wonka01.InventoryWeight;
 
 import me.wonka01.InventoryWeight.commands.InventoryWeightCommands;
 import me.wonka01.InventoryWeight.configuration.LanguageConfig;
-import me.wonka01.InventoryWeight.events.AddItemEvent;
 import me.wonka01.InventoryWeight.events.FreezePlayerEvent;
 import me.wonka01.InventoryWeight.events.JoinEvent;
-import me.wonka01.InventoryWeight.events.RemoveItemEvent;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeight;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
 import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
@@ -19,13 +17,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class InventoryWeight extends JavaPlugin {
 
+    public boolean showWeightChange;
     private InventoryWeightCommands commands;
     private LanguageConfig languageConfig;
-
-    public boolean showWeightChange;
 
     @Override
     public void onEnable() {
@@ -46,20 +44,21 @@ public class InventoryWeight extends JavaPlugin {
         }
 
         scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
             public void run() {
                 HashMap<UUID, PlayerWeight> mapReference = PlayerWeightMap.getPlayerWeightMap();
-                Iterator hmIterator = mapReference.entrySet().iterator();
+                Iterator<Entry<UUID, PlayerWeight>> hmIterator = mapReference.entrySet().iterator();
 
                 while (hmIterator.hasNext()) {
-                    Map.Entry element = (Map.Entry) hmIterator.next();
-                    UUID playerId = (UUID) element.getKey();
-                    PlayerWeight playerWeight = (PlayerWeight) element.getValue();
+                    Entry<UUID, PlayerWeight> element = hmIterator.next();
+                    UUID playerId = element.getKey();
+                    PlayerWeight playerWeight = element.getValue();
                     Server server = getServer();
                     if (server.getPlayer(playerId) != null) {
                         Inventory inv = server.getPlayer(playerId).getInventory();
                         if (inv != null) {
-                            playerWeight.setWeight(InventoryCheckUtil.getInventoryWeight(inv.getContents()));
+                            Map<String, Double> weightMap = InventoryCheckUtil.getInventoryWeight(inv.getContents());
+                            playerWeight.setWeight(weightMap.get("totalWeight"));
+                            playerWeight.setIncreasedCapacity(weightMap.get("totalIncreasedCapacity"));
                         }
                     }
                 }
@@ -71,7 +70,7 @@ public class InventoryWeight extends JavaPlugin {
         }
 
         // add all players to map
-        for(Player player : this.getServer().getOnlinePlayers()) {
+        for (Player player : this.getServer().getOnlinePlayers()) {
             JoinEvent.addPlayerToWeightMap(player);
         }
     }
@@ -97,7 +96,7 @@ public class InventoryWeight extends JavaPlugin {
         List<?> loreWeights = getConfig().getList("customLoreWeights");
 
         InventoryCheckUtil.defaultWeight = getConfig().getDouble("defaultWeight");
-        if(matWeights != null) {
+        if (matWeights != null) {
             for (Object item : matWeights) {
                 LinkedHashMap<?, ?> map = (LinkedHashMap) item;
                 double weight = getDoubleFromConfigValue(map.get("weight"));
@@ -106,7 +105,7 @@ public class InventoryWeight extends JavaPlugin {
             }
         }
 
-        if(nameWeights != null) {
+        if (nameWeights != null) {
             for (Object item : nameWeights) {
                 LinkedHashMap<?, ?> map = (LinkedHashMap) item;
                 double weight = getDoubleFromConfigValue(map.get("weight"));
@@ -116,7 +115,7 @@ public class InventoryWeight extends JavaPlugin {
             }
         }
 
-        if(loreWeights != null) {
+        if (loreWeights != null) {
             for (Object item : loreWeights) {
                 LinkedHashMap<?, ?> map = (LinkedHashMap) item;
                 double weight = getDoubleFromConfigValue(map.get("weight"));
@@ -127,6 +126,8 @@ public class InventoryWeight extends JavaPlugin {
         }
 
         InventoryCheckUtil.loreTag = getConfig().getString("loreTag");
+        InventoryCheckUtil.capacityTag = getConfig().getString("capacityTag");
+
         PlayerWeight.initialize(disableMovement, capacity, minWeight, maxWeight);
 
         List<String> worlds = getConfig().getStringList("worlds");
@@ -143,8 +144,6 @@ public class InventoryWeight extends JavaPlugin {
     }
 
     private void registerEvents() {
-        getServer().getPluginManager().registerEvents(new AddItemEvent(), this);
-        getServer().getPluginManager().registerEvents(new RemoveItemEvent(), this);
         getServer().getPluginManager().registerEvents(new JoinEvent(), this);
         getServer().getPluginManager().registerEvents(new FreezePlayerEvent(), this);
     }
@@ -159,5 +158,4 @@ public class InventoryWeight extends JavaPlugin {
         setUpMessageConfig();
         initConfig();
     }
-
 }

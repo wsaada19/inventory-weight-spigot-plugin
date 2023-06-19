@@ -15,7 +15,7 @@ public class InventoryWeightCommands implements CommandExecutor {
 
     private InventoryWeight plugin = JavaPlugin.getPlugin(InventoryWeight.class);
     private HashMap<String, SubCommand> subCommands;
-    private final String main = "iw";
+    private final String main = "inventoryweight";
 
     public void setup() {
 

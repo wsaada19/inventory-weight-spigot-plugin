@@ -1,13 +1,15 @@
 name: InventoryWeight
 version: 2.1
-author: Will
+author: wonka19
 main: me.wonka01.InventoryWeight.InventoryWeight
 api-version: 1.13
 
 softdepend: [PlaceholderAPI]
 
 commands:
-  iw:
+  inventoryweight:
+    aliases: iw
+    description: Commands for Inventory Weight Plugin
     usage: /iw [help, weight, get] are the available commands
 
 permissions:

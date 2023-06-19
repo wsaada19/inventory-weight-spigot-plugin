@@ -7,16 +7,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+
 import java.util.UUID;
 
 public class PlayerWeight {
 
-    private static boolean disableMovement;
     public static int defaultMaxCapacity;
+    private static boolean disableMovement;
     private static float minSpeed;
     private static float maxSpeed;
 
     private double weight;
+    private double increasedCapacity;
     private UUID playerId;
     private int maxCapacity;
     private boolean isPlayerFrozen;
@@ -25,21 +27,20 @@ public class PlayerWeight {
         this.weight = weight;
         this.playerId = id;
         maxCapacity = defaultMaxCapacity;
+        increasedCapacity = 0.0;
         isPlayerFrozen = false;
         changeSpeed();
     }
 
+    public static void initialize(boolean disableMovement, int capacity, float min, float max) {
+        PlayerWeight.disableMovement = disableMovement;
+        defaultMaxCapacity = capacity;
+        minSpeed = min;
+        maxSpeed = max;
+    }
+
     public double getWeight() {
         return weight;
-    }
-
-    public void setMaxWeight(int max) {
-        maxCapacity = max;
-        changeSpeed();
-    }
-
-    public int getMaxWeight() {
-        return maxCapacity;
     }
 
     public void setWeight(double newWeight) {
@@ -47,15 +48,27 @@ public class PlayerWeight {
         changeSpeed();
     }
 
+    public void setIncreasedCapacity(double capacity) {
+        increasedCapacity = capacity;
+        changeSpeed();
+    }
+
+    public double getMaxWeight() {
+        return maxCapacity + increasedCapacity;
+    }
+
+    public void setMaxWeight(int max) {
+        maxCapacity = max;
+    }
+
     private void changeSpeed() {
         Player player = Bukkit.getPlayer(playerId);
-
-        if(isPluginDisabledForUserOrWorld(player)) {
+        if (isPluginDisabledForUserOrWorld(player)) {
             player.setWalkSpeed(0.20f);
             return;
         }
 
-        if (weight > maxCapacity) {
+        if (weight > this.getMaxWeight()) {
             handleMaxCapacity(player);
             return;
         } else {
@@ -65,7 +78,7 @@ public class PlayerWeight {
             }
         }
 
-        float weightRatio = (float) weight / (float) maxCapacity;
+        float weightRatio = (float) weight / (float) this.getMaxWeight();
 
         float weightFloat = maxSpeed - (weightRatio * (maxSpeed - minSpeed));
 
@@ -77,22 +90,20 @@ public class PlayerWeight {
 
     private boolean isPluginDisabledForUserOrWorld(Player player) {
         WorldList worldList = WorldList.getInstance();
-        if(player == null) {
+        if (player == null) {
             return true;
-        } else if(player.hasPermission("inventoryweight.off")) {
+        } else if (player.hasPermission("inventoryweight.off")) {
             return true;
-        } else if( player.getGameMode().equals(GameMode.CREATIVE)) {
+        } else if (player.getGameMode().equals(GameMode.CREATIVE)) {
             return true;
-        } else if(!(worldList.isInventoryWeightEnabled(player.getWorld().getName()))) {
-            return true;
-        } else {
-            return false;
-        }
+        } else
+            return !(worldList.isInventoryWeightEnabled(player.getWorld().getName()));
     }
 
     private void handleMaxCapacity(Player player) {
         if (disableMovement && !isPlayerFrozen) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', LanguageConfig.getConfig().getMessages().getCantMoveMessage()));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    LanguageConfig.getConfig().getMessages().getCantMoveMessage()));
             FreezePlayerEvent.freezePlayer(playerId);
             isPlayerFrozen = true;
         } else {
@@ -102,7 +113,7 @@ public class PlayerWeight {
 
     public String getSpeedDisplay() {
         StringBuilder speedDisplay = new StringBuilder();
-        double ratio = weight / (double) maxCapacity;
+        double ratio = weight / this.getMaxWeight();
         int result = 20 - (int) (ratio * 20.0);
         for (int i = 0; i < 20; i++) {
             if (i < result) {
@@ -117,19 +128,12 @@ public class PlayerWeight {
     }
 
     public int getPercentage() {
-        double ratio = weight / (double) maxCapacity;
+        double ratio = weight / this.getMaxWeight();
         int finalRatio = (100 - (int) (ratio * 100.0));
         if (finalRatio < 0) {
             return 0;
         } else {
             return finalRatio;
         }
-    }
-
-    public static void initialize(boolean disableMovement, int capacity, float min, float max) {
-        PlayerWeight.disableMovement = disableMovement;
-        defaultMaxCapacity = capacity;
-        minSpeed = min;
-        maxSpeed = max;
     }
 }
