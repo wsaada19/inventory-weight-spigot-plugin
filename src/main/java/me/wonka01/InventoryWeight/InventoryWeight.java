@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -47,14 +48,19 @@ public class InventoryWeight extends JavaPlugin {
             public void run() {
                 HashMap<UUID, PlayerWeight> mapReference = PlayerWeightMap.getPlayerWeightMap();
                 Iterator<Entry<UUID, PlayerWeight>> hmIterator = mapReference.entrySet().iterator();
-
+                
                 while (hmIterator.hasNext()) {
                     Entry<UUID, PlayerWeight> element = hmIterator.next();
                     UUID playerId = element.getKey();
                     PlayerWeight playerWeight = element.getValue();
                     Server server = getServer();
                     if (server.getPlayer(playerId) != null) {
+                        int maxWeight = getMaxWeightPerm(server.getPlayer(playerId));
+                        if (maxWeight != -1) {
+                            playerWeight.setMaxWeight(maxWeight);
+                        }
                         Inventory inv = server.getPlayer(playerId).getInventory();
+
                         if (inv != null) {
                             Map<String, Double> weightMap = InventoryCheckUtil.getInventoryWeight(inv.getContents());
                             playerWeight.setWeight(weightMap.get("totalWeight"));
@@ -75,6 +81,19 @@ public class InventoryWeight extends JavaPlugin {
         }
     }
 
+    private int getMaxWeightPerm(Player player) {
+        Set<PermissionAttachmentInfo> set = player.getEffectivePermissions();
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext()) {
+            PermissionAttachmentInfo info = (PermissionAttachmentInfo) iterator.next();
+            if (info.getPermission().contains("inventoryweight.maxweight.")) {
+                String amount = info.getPermission().substring(26);
+                return Integer.parseInt(amount);
+            }
+        }
+        return -1;
+    }
+
     @Override
     public void onDisable() {
         getLogger().info("onDisable is called!");
@@ -90,6 +109,8 @@ public class InventoryWeight extends JavaPlugin {
 
         float minWeight = (float) getConfig().getDouble("minWalkSpeed");
         float maxWeight = (float) getConfig().getDouble("maxWalkSpeed");
+
+        double beginSlowdown = getConfig().getDouble("beginSlowdown", 0.0);
 
         List<?> matWeights = getConfig().getList("materialWeights");
         List<?> nameWeights = getConfig().getList("customItemWeights");
@@ -128,7 +149,7 @@ public class InventoryWeight extends JavaPlugin {
         InventoryCheckUtil.loreTag = getConfig().getString("loreTag");
         InventoryCheckUtil.capacityTag = getConfig().getString("capacityTag");
 
-        PlayerWeight.initialize(disableMovement, capacity, minWeight, maxWeight);
+        PlayerWeight.initialize(disableMovement, capacity, minWeight, maxWeight, beginSlowdown);
 
         List<String> worlds = getConfig().getStringList("worlds");
         WorldList.initializeWorldList(worlds);

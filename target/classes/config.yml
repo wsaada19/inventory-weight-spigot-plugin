@@ -11,6 +11,11 @@ disableMovement: true
 maxWalkSpeed: .30
 minWalkSpeed: .05
 
+# The % of the weight capacity that a player must reach before their speed begins to decrease
+# Up until this value the player will have the max walk speed. For example if the value is set to .50. The player will
+# be at max speed of .30 until they reach 50% of the weight limit. Then it will begin to decrease.
+beginSlowdown: 0.0
+
 # Time in seconds where the plugin will recalculate each player's weight
 # A lower number results in more frequent updates
 checkInventoryTimer: 2

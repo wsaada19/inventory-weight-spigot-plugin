@@ -16,6 +16,7 @@ public class PlayerWeight {
     private static boolean disableMovement;
     private static float minSpeed;
     private static float maxSpeed;
+    private static double beginSlowdown;
 
     private double weight;
     private double increasedCapacity;
@@ -32,11 +33,12 @@ public class PlayerWeight {
         changeSpeed();
     }
 
-    public static void initialize(boolean disableMovement, int capacity, float min, float max) {
+    public static void initialize(boolean disableMovement, int capacity, float min, float max, double bSlowdown) {
         PlayerWeight.disableMovement = disableMovement;
         defaultMaxCapacity = capacity;
         minSpeed = min;
         maxSpeed = max;
+        beginSlowdown = bSlowdown;
     }
 
     public double getWeight() {
@@ -77,14 +79,19 @@ public class PlayerWeight {
                 isPlayerFrozen = false;
             }
         }
-
-        float weightRatio = (float) weight / (float) this.getMaxWeight();
+        
+        double speedAdjustment = 0.0;
+        if (beginSlowdown > 0.0) {
+            speedAdjustment = beginSlowdown * this.getMaxWeight();
+        }
+        float weightRatio = ((float) weight - (float)speedAdjustment) / ((float) this.getMaxWeight() - (float)speedAdjustment);
 
         float weightFloat = maxSpeed - (weightRatio * (maxSpeed - minSpeed));
 
-        if (weight == 0) {
+        if (weight <= 0 || speedAdjustment >=weight) {
             weightFloat = maxSpeed;
         }
+
         player.setWalkSpeed(weightFloat);
     }
 
@@ -128,7 +135,14 @@ public class PlayerWeight {
     }
 
     public int getPercentage() {
-        double ratio = weight / this.getMaxWeight();
+        double speedAdjustment = 0.0;
+        if (beginSlowdown > 0.0) {
+            speedAdjustment = beginSlowdown * this.getMaxWeight();
+        }
+        double ratio = (weight - speedAdjustment) / (this.getMaxWeight() - speedAdjustment);
+        if (ratio <= 0) {
+            return 100;
+        }
         int finalRatio = (100 - (int) (ratio * 100.0));
         if (finalRatio < 0) {
             return 0;
