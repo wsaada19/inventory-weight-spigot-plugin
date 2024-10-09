@@ -22,7 +22,6 @@ import java.util.Map.Entry;
 
 public class InventoryWeight extends JavaPlugin {
 
-    public boolean showWeightChange;
     private InventoryWeightCommands commands;
     private LanguageConfig languageConfig;
 
@@ -48,7 +47,7 @@ public class InventoryWeight extends JavaPlugin {
             public void run() {
                 HashMap<UUID, PlayerWeight> mapReference = PlayerWeightMap.getPlayerWeightMap();
                 Iterator<Entry<UUID, PlayerWeight>> hmIterator = mapReference.entrySet().iterator();
-                
+
                 while (hmIterator.hasNext()) {
                     Entry<UUID, PlayerWeight> element = hmIterator.next();
                     UUID playerId = element.getKey();
@@ -63,8 +62,11 @@ public class InventoryWeight extends JavaPlugin {
 
                         if (inv != null) {
                             Map<String, Double> weightMap = InventoryCheckUtil.getInventoryWeight(inv.getContents());
+                            boolean isOverLimit = weightMap.get("overLimit") > 0.0;
+                            playerWeight.setIsPlayerOverLimit(isOverLimit);
                             playerWeight.setWeight(weightMap.get("totalWeight"));
                             playerWeight.setIncreasedCapacity(weightMap.get("totalIncreasedCapacity"));
+                            playerWeight.changeSpeed();
                         }
                     }
                 }
@@ -103,7 +105,6 @@ public class InventoryWeight extends JavaPlugin {
 
         boolean disableMovement = getConfig().getBoolean("disableMovement");
         int capacity = getConfig().getInt("weightLimit");
-        showWeightChange = getConfig().getBoolean("showWeightChange");
         boolean armorOnly = getConfig().getBoolean("armorOnly");
         InventoryCheckUtil.armorOnlyMode = armorOnly;
 
@@ -114,9 +115,15 @@ public class InventoryWeight extends JavaPlugin {
 
         List<?> matWeights = getConfig().getList("materialWeights");
         List<?> nameWeights = getConfig().getList("customItemWeights");
+        List<?> itemLimits = getConfig().getList("itemLimits");
         List<?> loreWeights = getConfig().getList("customLoreWeights");
 
         InventoryCheckUtil.defaultWeight = getConfig().getDouble("defaultWeight");
+        InventoryCheckUtil.mapOfItemLimits.clear();
+        InventoryCheckUtil.mapOfWeightsByMaterial.clear();
+        InventoryCheckUtil.mapOfWeightsByLore.clear();
+        InventoryCheckUtil.mapOfWeightsByDisplayName.clear();
+
         if (matWeights != null) {
             for (Object item : matWeights) {
                 LinkedHashMap<?, ?> map = (LinkedHashMap) item;
@@ -133,6 +140,15 @@ public class InventoryWeight extends JavaPlugin {
                 String itemName = (String) map.get("name");
 
                 InventoryCheckUtil.mapOfWeightsByDisplayName.put(itemName, weight);
+            }
+        }
+
+        if (itemLimits != null) {
+            for (Object item : itemLimits) {
+                LinkedHashMap<?, ?> map = (LinkedHashMap) item;
+                int limit = (Integer) map.get("limit");
+                String itemName = (String) map.get("material");
+                InventoryCheckUtil.mapOfItemLimits.put(itemName, limit);
             }
         }
 

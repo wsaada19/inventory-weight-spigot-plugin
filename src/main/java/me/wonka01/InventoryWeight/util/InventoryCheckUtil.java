@@ -1,6 +1,8 @@
 package me.wonka01.InventoryWeight.util;
 
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +14,7 @@ public class InventoryCheckUtil {
     public static HashMap<String, Double> mapOfWeightsByMaterial = new HashMap<String, Double>();
     public static HashMap<String, Double> mapOfWeightsByDisplayName = new HashMap<String, Double>();
     public static HashMap<String, Double> mapOfWeightsByLore = new HashMap<String, Double>();
+    public static HashMap<String, Integer> mapOfItemLimits = new HashMap<String, Integer>();
     public static boolean armorOnlyMode = false;
     public static String loreTag = "";
     public static String capacityTag = "";
@@ -20,6 +23,8 @@ public class InventoryCheckUtil {
     public static Map<String, Double> getInventoryWeight(ItemStack[] items) {
         double totalWeight = 0;
         double totalIncreasedCapacity = 0;
+        HashMap<String, Integer> countMap = new HashMap<String, Integer>();
+
         if (armorOnlyMode) {
             for (int i = 0; i < items.length; i++) {
                 if (items[i] == null || (i < 36 || i > 40)) {
@@ -34,19 +39,53 @@ public class InventoryCheckUtil {
                 if (item == null) {
                     continue;
                 }
+
+                if (countMap.containsKey(item.getType().toString())) {
+                    countMap.put(item.getType().toString(), countMap.get(item.getType().toString()) + item.getAmount());
+                } else {
+                    countMap.put(item.getType().toString(), item.getAmount());
+                }
+
                 int stackSize = item.getAmount();
                 double weight = getItemWeight(item);
+                if (item.getType().toString().contains("SHULKER_BOX")) {
+                    BlockStateMeta im = (BlockStateMeta) item.getItemMeta();
+                    if (im.getBlockState() instanceof ShulkerBox) {
+                        ShulkerBox shulker = (ShulkerBox) im.getBlockState();
+                        ItemStack[] shulkerItems = shulker.getInventory().getContents();
+                        for (ItemStack shulkerItem : shulkerItems) {
+                            if (shulkerItem == null) {
+                                continue;
+                            }
+                            int shulkerStackSize = shulkerItem.getAmount();
+                            double shulkerWeight = getItemWeight(shulkerItem);
+                            totalWeight += ((double) shulkerStackSize * shulkerWeight);
+                        }
+                    }
+                }
                 if (weight < 0) {
                     totalIncreasedCapacity += weight * -1.0;
                     continue;
                 }
+
                 totalWeight += ((double) stackSize * weight);
             }
         }
-
         Map<String, Double> weightMap = new HashMap<String, Double>();
+
+        mapOfItemLimits.forEach((key, value) -> {
+            if (countMap.containsKey(key)) {
+                if (countMap.get(key) > value) {
+                    weightMap.put("overLimit", 1.0);
+                }
+            }
+        });
+
         weightMap.put("totalWeight", totalWeight);
         weightMap.put("totalIncreasedCapacity", totalIncreasedCapacity);
+        if (!weightMap.containsKey("overLimit")) {
+            weightMap.put("overLimit", 0.0);
+        }
         return weightMap;
     }
 

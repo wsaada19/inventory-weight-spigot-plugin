@@ -61,6 +61,9 @@ customItemWeights:
   - name: Diamond Sword of Doom
     weight: 20
 
-# If true a player will be notified each time their inventory weight changes
-# Don't recommend using - this is mostly for development purposes
-showWeightChange: false
+# Limit the amount of a specific item that player's can have in their inventory.
+# In this example, a player can not have more than 5 shulker boxes in their inventory.
+# When player is over the limit they will be treated as if they've gone over the max weight.
+itemLimits:
+  - material: SHULKER_BOX
+    limit: 5
