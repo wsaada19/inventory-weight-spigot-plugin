@@ -27,3 +27,4 @@ InventoryWeight.iml
 target/*
 target/classes/plugin.yml
 target/classes/plugin.yml
+/target

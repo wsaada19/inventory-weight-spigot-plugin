@@ -2,6 +2,7 @@ package me.wonka01.InventoryWeight.playerweight;
 
 import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.events.FreezePlayerEvent;
+import me.wonka01.InventoryWeight.util.Subtitles;
 import me.wonka01.InventoryWeight.util.WorldList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,6 +24,7 @@ public class PlayerWeight {
     private UUID playerId;
     private int maxCapacity;
     private boolean isPlayerFrozen;
+    private boolean isPlayerOverLimit;
 
     public PlayerWeight(double weight, UUID id) {
         this.weight = weight;
@@ -30,6 +32,7 @@ public class PlayerWeight {
         maxCapacity = defaultMaxCapacity;
         increasedCapacity = 0.0;
         isPlayerFrozen = false;
+        isPlayerOverLimit = false;
         changeSpeed();
     }
 
@@ -41,18 +44,24 @@ public class PlayerWeight {
         beginSlowdown = bSlowdown;
     }
 
+    public boolean getIsPlayerOverLimit() {
+        return isPlayerOverLimit;
+    }
+
+    public void setIsPlayerOverLimit(boolean isPlayerOverLimit) {
+        this.isPlayerOverLimit = isPlayerOverLimit;
+    }
+
     public double getWeight() {
         return weight;
     }
 
     public void setWeight(double newWeight) {
         weight = newWeight;
-        changeSpeed();
     }
 
     public void setIncreasedCapacity(double capacity) {
         increasedCapacity = capacity;
-        changeSpeed();
     }
 
     public double getMaxWeight() {
@@ -63,10 +72,15 @@ public class PlayerWeight {
         maxCapacity = max;
     }
 
-    private void changeSpeed() {
+    public void changeSpeed() {
         Player player = Bukkit.getPlayer(playerId);
         if (isPluginDisabledForUserOrWorld(player)) {
             player.setWalkSpeed(0.20f);
+            return;
+        }
+
+        if (isPlayerOverLimit) {
+            handleMaxCapacity(player);
             return;
         }
 
@@ -79,16 +93,17 @@ public class PlayerWeight {
                 isPlayerFrozen = false;
             }
         }
-        
+
         double speedAdjustment = 0.0;
         if (beginSlowdown > 0.0) {
             speedAdjustment = beginSlowdown * this.getMaxWeight();
         }
-        float weightRatio = ((float) weight - (float)speedAdjustment) / ((float) this.getMaxWeight() - (float)speedAdjustment);
+        float weightRatio = ((float) weight - (float) speedAdjustment)
+                / ((float) this.getMaxWeight() - (float) speedAdjustment);
 
         float weightFloat = maxSpeed - (weightRatio * (maxSpeed - minSpeed));
 
-        if (weight <= 0 || speedAdjustment >=weight) {
+        if (weight <= 0 || speedAdjustment >= weight) {
             weightFloat = maxSpeed;
         }
 
