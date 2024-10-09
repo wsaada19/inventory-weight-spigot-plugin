@@ -15,6 +15,11 @@ The Inventory Weight plugin for Minecraft ([Spigot](https://www.spigotmc.org/) 1
 
 ---
 
+1. [Configuration](Configuration Guide)
+2. [Commands](Commands)
+3. [Permissions](Permissions)
+4. [Placeholders](Placeholders)
+
 ## Configuration Guide
 
 The plugin configuration is managed through a YAML file called config.yml. Below is a breakdown of the available options.
