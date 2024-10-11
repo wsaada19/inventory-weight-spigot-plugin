@@ -1,6 +1,5 @@
 package me.wonka01.InventoryWeight.configuration;
 
-
 import me.wonka01.InventoryWeight.InventoryWeight;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -11,7 +10,6 @@ public class LanguageConfig {
     private static LanguageConfig config;
     private YamlConfiguration yamlConfiguration;
     private MessagesModel messages;
-
 
     public static LanguageConfig getConfig() {
         if (config == null) {
@@ -55,12 +53,21 @@ public class LanguageConfig {
         String reloadCommand = yamlConfiguration.getString("reloadCommand");
         String helpMessage = yamlConfiguration.getString("helpMessage");
         String cantMove = yamlConfiguration.getString("cantMoveMessage");
+        String overlimit = yamlConfiguration.getString("overLimitMessage");
+        String overWeight = yamlConfiguration.getString("overWeightMessage");
         if (cantMove == null || cantMove.isEmpty()) {
             cantMove = "&cYou can't carry your weight anymore, you're going to need to drop some items!";
         }
+        if (overlimit == null) {
+            overlimit = "&cYou're over the item limit!";
+        }
+
+        if (overWeight == null) {
+            overWeight = "&cYou're over your weight limit!";
+        }
 
         messages = new MessagesModel(noPermission, invalidCommand, invalidMaterial, itemWeight,
-                weight, speed, reloadCommand, helpMessage, cantMove);
+                weight, speed, reloadCommand, helpMessage, cantMove, overlimit, overWeight);
         config = this;
     }
 }

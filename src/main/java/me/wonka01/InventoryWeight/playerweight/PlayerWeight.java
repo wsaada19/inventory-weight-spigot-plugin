@@ -2,12 +2,13 @@ package me.wonka01.InventoryWeight.playerweight;
 
 import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.events.FreezePlayerEvent;
-import me.wonka01.InventoryWeight.util.Subtitles;
 import me.wonka01.InventoryWeight.util.WorldList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ public class PlayerWeight {
     private static float minSpeed;
     private static float maxSpeed;
     private static double beginSlowdown;
+    private static boolean blindPlayer;
 
     private double weight;
     private double increasedCapacity;
@@ -36,12 +38,14 @@ public class PlayerWeight {
         changeSpeed();
     }
 
-    public static void initialize(boolean disableMovement, int capacity, float min, float max, double bSlowdown) {
+    public static void initialize(boolean disableMovement, int capacity, float min, float max, double bSlowdown,
+            boolean blindAtMax) {
         PlayerWeight.disableMovement = disableMovement;
         defaultMaxCapacity = capacity;
         minSpeed = min;
         maxSpeed = max;
         beginSlowdown = bSlowdown;
+        blindPlayer = blindAtMax;
     }
 
     public boolean getIsPlayerOverLimit() {
@@ -89,9 +93,15 @@ public class PlayerWeight {
             return;
         } else {
             if (isPlayerFrozen) {
-                FreezePlayerEvent.unfreezePlayer(playerId);
+                if (disableMovement) {
+                    FreezePlayerEvent.unfreezePlayer(playerId);
+                }
                 isPlayerFrozen = false;
             }
+        }
+
+        if (player.hasPotionEffect(PotionEffectType.BLINDNESS)) {
+            player.removePotionEffect(PotionEffectType.BLINDNESS);
         }
 
         double speedAdjustment = 0.0;
@@ -123,13 +133,30 @@ public class PlayerWeight {
     }
 
     private void handleMaxCapacity(Player player) {
+        String overlimitMsg = LanguageConfig.getConfig().getMessages().getOverLimitMessage();
+        if (isPlayerOverLimit && !isPlayerFrozen && overlimitMsg != null && !overlimitMsg.isEmpty()) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    overlimitMsg));
+            player.setWalkSpeed(minSpeed);
+        }
+
+        if (!isPlayerFrozen && !disableMovement && !isPlayerOverLimit) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    LanguageConfig.getConfig().getMessages().getOverWeightMessage()));
+        }
+
         if (disableMovement && !isPlayerFrozen) {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     LanguageConfig.getConfig().getMessages().getCantMoveMessage()));
             FreezePlayerEvent.freezePlayer(playerId);
             isPlayerFrozen = true;
-        } else {
-            player.setWalkSpeed(minSpeed);
+        }
+        player.setWalkSpeed(minSpeed);
+        isPlayerFrozen = true;
+
+        if (blindPlayer) {
+            PotionEffect blindness = new PotionEffect(PotionEffectType.BLINDNESS, 1000000, 1);
+            player.addPotionEffect(blindness);
         }
     }
 

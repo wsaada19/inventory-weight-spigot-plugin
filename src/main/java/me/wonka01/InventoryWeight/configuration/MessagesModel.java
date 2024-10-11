@@ -11,10 +11,13 @@ public class MessagesModel {
     private String reloadCommand;
     private String helpMessage;
     private String cantMoveMessage;
+    private String overLimitMessage;
+    private String overWeightMessage;
 
-
+    // TODO - make this a map instead of an object
     public MessagesModel(String noPermission, String invalidCommand, String invalidMaterial, String itemWeight,
-                         String weight, String speed, String reloadCommand, String helpMessage, String cantMoveMessage) {
+            String weight, String speed, String reloadCommand, String helpMessage, String cantMoveMessage,
+            String overLimitMessage, String overWeightMessage) {
         this.noPermission = noPermission;
         this.invalidCommand = invalidCommand;
         this.invalidMaterial = invalidMaterial;
@@ -24,7 +27,8 @@ public class MessagesModel {
         this.reloadCommand = reloadCommand;
         this.helpMessage = helpMessage;
         this.cantMoveMessage = cantMoveMessage;
-
+        this.overLimitMessage = overLimitMessage;
+        this.overWeightMessage = overWeightMessage;
     }
 
     public String getNoPermission() {
@@ -61,5 +65,13 @@ public class MessagesModel {
 
     public String getCantMoveMessage() {
         return cantMoveMessage;
+    }
+
+    public String getOverLimitMessage() {
+        return overLimitMessage;
+    }
+
+    public String getOverWeightMessage() {
+        return overWeightMessage;
     }
 }

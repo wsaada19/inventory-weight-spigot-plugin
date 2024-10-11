@@ -6,7 +6,7 @@
 
     <groupId>me.williamsaada</groupId>
     <artifactId>InventoryWeight</artifactId>
-    <version>2.19.0</version>
+    <version>2.20.0</version>
     <build>
         <defaultGoal>clean validate deploy</defaultGoal>
         <finalName>${project.name}-${project.version}</finalName>

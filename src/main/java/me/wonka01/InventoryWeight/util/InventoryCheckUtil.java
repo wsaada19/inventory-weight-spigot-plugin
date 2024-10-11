@@ -73,10 +73,24 @@ public class InventoryCheckUtil {
         }
         Map<String, Double> weightMap = new HashMap<String, Double>();
 
+        Map<String, Integer> finalCountMap = new HashMap<String, Integer>();
         mapOfItemLimits.forEach((key, value) -> {
-            if (countMap.containsKey(key)) {
-                if (countMap.get(key) > value) {
+            countMap.forEach((key2, value2) -> {
+                if (key2.contains(key)) {
+                    if (finalCountMap.containsKey(key)) {
+                        finalCountMap.put(key, finalCountMap.get(key) + value2);
+                    } else {
+                        finalCountMap.put(key, value2);
+                    }
+                }
+            });
+        });
+
+        finalCountMap.forEach((key, value) -> {
+            if (mapOfItemLimits.containsKey(key)) {
+                if (value > mapOfItemLimits.get(key)) {
                     weightMap.put("overLimit", 1.0);
+                    return;
                 }
             }
         });
