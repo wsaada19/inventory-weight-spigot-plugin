@@ -1,12 +1,22 @@
-noPermission: "&cYou do not have permission to perform this action!"
-invalidCommand: "&cInvalid command: use /iw help for a list of commands"
-invalidMaterial: "&cThe given material could not be found"
+noPermission: '&cYou do not have permission to perform this action!'
+invalidCommand: '&cInvalid command: use /iw help for a list of commands'
+invalidMaterial: '&cThe given material could not be found'
 # The weight is added to the end
-itemWeight: "&eItem weight is"
+itemWeight: '&eItem weight is'
 # The following strings are used when a player checks their weight
-weight: "&eWeight"
-speed: "&eSpeed"
-reloadCommand: "&AThe configuration has been reloaded successfully!"
+weight: '&eWeight'
+speed: '&eSpeed'
+reloadCommand: '&AThe configuration has been reloaded successfully!'
 cantMoveMessage: "&cYou can't carry your weight anymore, you're going to need to drop some items!"
-helpMessage: "&eThe inventory weight plugin keeps track of the items stored in a player's inventory.
-              Each item has a specific weight value, to see your current weight use /iw weight"
+overWeightMessage: "&cYou're carrying too much weight, you're going to need to drop some items!"
+helpMessage:
+  "&eWelcome to the Inventory Weight Plugin! This plugin tracks the weight of items in your inventory and adjusts your movement speed based on the total weight you're carrying.
+  You can customize item weights, set limits, and much more. Here are some useful commands to get started:
+
+  &7- &a/iw weight &f- Check your current inventory weight and speed.
+  &7- &a/iw get &f- See the weight of the item you're holding.
+  &7- &a/iw get [Material Name] &f- Check the default weight of a specific material.
+  &7- &a/iw reload &f- Reload the plugin configuration.
+
+  &eManage your inventory wisely to avoid slowing down or being unable to move!"
+overLimitMessage: '&cYou are carrying too many Shulker Boxes, you need to drop some!'

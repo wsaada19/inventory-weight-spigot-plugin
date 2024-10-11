@@ -33,6 +33,7 @@ disableMovement: true
 
 - **`weightLimit`**: Sets the maximum weight a player can carry before their speed will no longer decrease. This allows for a broader range of speed variance as the weight limit increases. Default is `500`.
 - **`disableMovement`**: If `true`, once the player reaches or exceeds the weight limit, they will be unable to move until they reduce their weight. Default is `true`.
+- **`blindAtMax: true`**: If `true`, the player will be blinded when they reach the weight limit. Default is `false`. This can be beneficial because player's can not sprint when they're blinded. Which prevents the player from "jump sprinting" which can bypass the speed reduction.
 
 ### 2. **Player Movement Speed**
 
@@ -127,7 +128,7 @@ itemLimits:
     limit: 5
 ```
 
-- **`itemLimits`**: Limits the number of specific items a player can carry. For example, a player can carry no more than `5` shulker boxes. If they exceed this limit, they will be treated as if they’ve exceeded the max weight.
+- **`itemLimits`**: Limits the number of specific items a player can carry. For example, a player can carry no more than `5` shulker boxes. If they exceed this limit, they will be treated as if they’ve exceeded the max weight. This format checks if materials have the same name, so GREEN_SHULKER_BOX will be included in the count.
 
 ---
 
