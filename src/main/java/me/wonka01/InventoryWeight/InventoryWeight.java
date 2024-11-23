@@ -4,6 +4,7 @@ import me.wonka01.InventoryWeight.commands.InventoryWeightCommands;
 import me.wonka01.InventoryWeight.configuration.LanguageConfig;
 import me.wonka01.InventoryWeight.events.FreezePlayerEvent;
 import me.wonka01.InventoryWeight.events.JoinEvent;
+import me.wonka01.InventoryWeight.playerweight.ItemLimit;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeight;
 import me.wonka01.InventoryWeight.playerweight.PlayerWeightMap;
 import me.wonka01.InventoryWeight.util.InventoryCheckUtil;
@@ -54,14 +55,16 @@ public class InventoryWeight extends JavaPlugin {
                     PlayerWeight playerWeight = element.getValue();
                     Server server = getServer();
                     if (server.getPlayer(playerId) != null) {
-                        int maxWeight = getMaxWeightPerm(server.getPlayer(playerId));
+                        Player player = server.getPlayer(playerId);
+                        int maxWeight = getMaxWeightPerm(player);
                         if (maxWeight != -1) {
                             playerWeight.setMaxWeight(maxWeight);
                         }
-                        Inventory inv = server.getPlayer(playerId).getInventory();
+                        Inventory inv = player.getInventory();
 
                         if (inv != null) {
-                            Map<String, Double> weightMap = InventoryCheckUtil.getInventoryWeight(inv.getContents());
+                            Map<String, Double> weightMap = InventoryCheckUtil.getInventoryWeight(inv.getContents(),
+                                    player);
                             boolean isOverLimit = weightMap.get("overLimit") > 0.0;
                             playerWeight.setIsPlayerOverLimit(isOverLimit);
                             playerWeight.setWeight(weightMap.get("totalWeight"));
@@ -149,7 +152,9 @@ public class InventoryWeight extends JavaPlugin {
                 LinkedHashMap<?, ?> map = (LinkedHashMap) item;
                 int limit = (Integer) map.get("limit");
                 String itemName = (String) map.get("material");
-                InventoryCheckUtil.mapOfItemLimits.put(itemName, limit);
+                String permissionNode = (String) map.get("permission");
+                ItemLimit itemLimit = new ItemLimit(limit, permissionNode);
+                InventoryCheckUtil.mapOfItemLimits.put(itemName, itemLimit);
             }
         }
 

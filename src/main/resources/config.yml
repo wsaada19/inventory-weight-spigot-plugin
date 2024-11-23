@@ -72,3 +72,4 @@ customItemWeights:
 itemLimits:
   - material: SHULKER_BOX
     limit: 5
+    permission: 'somepermission.node'

@@ -29,7 +29,7 @@ public class GetWeightCommand implements SubCommand {
                 return;
             }
 
-            double weight = InventoryCheckUtil.mapOfWeightsByMaterial.get(materialAllCaps);
+            double weight = InventoryCheckUtil.getItemWeight(new ItemStack(Material.getMaterial(materialAllCaps)));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     LanguageConfig.getConfig().getMessages().getItemWeight() + " " + weight));
         }

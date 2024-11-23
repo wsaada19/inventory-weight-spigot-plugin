@@ -1,8 +1,11 @@
 package me.wonka01.InventoryWeight.util;
 
 import org.bukkit.block.ShulkerBox;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
+
+import me.wonka01.InventoryWeight.playerweight.ItemLimit;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,13 +17,13 @@ public class InventoryCheckUtil {
     public static HashMap<String, Double> mapOfWeightsByMaterial = new HashMap<String, Double>();
     public static HashMap<String, Double> mapOfWeightsByDisplayName = new HashMap<String, Double>();
     public static HashMap<String, Double> mapOfWeightsByLore = new HashMap<String, Double>();
-    public static HashMap<String, Integer> mapOfItemLimits = new HashMap<String, Integer>();
+    public static HashMap<String, ItemLimit> mapOfItemLimits = new HashMap<String, ItemLimit>();
     public static boolean armorOnlyMode = false;
     public static String loreTag = "";
     public static String capacityTag = "";
     public static double defaultWeight;
 
-    public static Map<String, Double> getInventoryWeight(ItemStack[] items) {
+    public static Map<String, Double> getInventoryWeight(ItemStack[] items, Player player) {
         double totalWeight = 0;
         double totalIncreasedCapacity = 0;
         HashMap<String, Integer> countMap = new HashMap<String, Integer>();
@@ -88,7 +91,7 @@ public class InventoryCheckUtil {
 
         finalCountMap.forEach((key, value) -> {
             if (mapOfItemLimits.containsKey(key)) {
-                if (value > mapOfItemLimits.get(key)) {
+                if (value > mapOfItemLimits.get(key).getLimit() && mapOfItemLimits.get(key).hasPermssion(player)) {
                     weightMap.put("overLimit", 1.0);
                     return;
                 }

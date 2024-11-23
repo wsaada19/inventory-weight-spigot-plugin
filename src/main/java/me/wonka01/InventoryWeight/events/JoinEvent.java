@@ -27,7 +27,8 @@ public class JoinEvent implements Listener {
         // item2.setItemMeta(meta2);
         // player.getInventory().addItem(item2);
 
-        Map<String, Double> weightMap = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents());
+        Map<String, Double> weightMap = InventoryCheckUtil.getInventoryWeight(player.getInventory().getContents(),
+                player);
         double inventoryWeight = weightMap.get("totalWeight");
 
         PlayerWeight playerData = new PlayerWeight(inventoryWeight, player.getUniqueId());
