@@ -27,6 +27,7 @@ public class PlayerWeight {
     private int maxCapacity;
     private boolean isPlayerFrozen;
     private boolean isPlayerOverLimit;
+    private boolean isBlind;
 
     public PlayerWeight(double weight, UUID id) {
         this.weight = weight;
@@ -35,6 +36,7 @@ public class PlayerWeight {
         increasedCapacity = 0.0;
         isPlayerFrozen = false;
         isPlayerOverLimit = false;
+        isBlind = false;
         changeSpeed();
     }
 
@@ -100,8 +102,9 @@ public class PlayerWeight {
             }
         }
 
-        if (player.hasPotionEffect(PotionEffectType.BLINDNESS)) {
+        if (blindPlayer && isBlind && player.hasPotionEffect(PotionEffectType.BLINDNESS)) {
             player.removePotionEffect(PotionEffectType.BLINDNESS);
+            isBlind = false;
         }
 
         double speedAdjustment = 0.0;
@@ -157,6 +160,7 @@ public class PlayerWeight {
         if (blindPlayer) {
             PotionEffect blindness = new PotionEffect(PotionEffectType.BLINDNESS, 1000000, 1);
             player.addPotionEffect(blindness);
+            isBlind = true;
         }
     }
 
