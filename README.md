@@ -15,10 +15,10 @@ The Inventory Weight plugin for Minecraft ([Spigot](https://www.spigotmc.org/) 1
 
 ---
 
-1. [Configuration](Configuration)
-2. [Commands](Commands)
-3. [Permissions](Permissions)
-4. [Placeholders](Placeholders)
+1. [Configuration](#Configuration)
+2. [Commands](#Commands)
+3. [Permissions](#Permissions)
+4. [Placeholders](#Placeholders)
 
 ## Configuration
 
