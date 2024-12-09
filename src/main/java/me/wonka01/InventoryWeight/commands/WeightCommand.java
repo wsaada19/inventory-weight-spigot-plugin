@@ -13,7 +13,13 @@ import org.bukkit.entity.Player;
 import java.text.DecimalFormat;
 
 public class WeightCommand implements SubCommand {
-    public void onCommand(Player player, String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "You must be a player to use this command"));
+            return;
+        }
+
+        Player player = (Player) sender;
         WorldList worldList = WorldList.getInstance();
         if (player.hasPermission("inventoryweight.off") || player.getGameMode().equals(GameMode.CREATIVE)
                 || !(worldList.isInventoryWeightEnabled(player.getWorld().getName()))) {
@@ -32,9 +38,4 @@ public class WeightCommand implements SubCommand {
                 LanguageConfig.getConfig().getMessages().getSpeed() + ": &a" + playerWeight.getPercentage() + "%"));
         player.sendMessage(ChatColor.WHITE + "[" + playerWeight.getSpeedDisplay() + ChatColor.WHITE + "]");
     }
-
-    public void onCommand(CommandSender sender, String[] args) {
-        throw new NotImplementedException();
-    }
-
 }
