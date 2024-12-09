@@ -66,10 +66,16 @@ customItemWeights:
   - name: Diamond Sword of Doom
     weight: 20
 
+modelIdWeights:
+  - modelId: 1000
+    weight: 13
+
 # Limit the amount of a specific item that player's can have in their inventory.
 # In this example, a player can not have more than 5 shulker boxes in their inventory.
 # When player is over the limit they will be treated as if they've gone over the max weight.
 itemLimits:
+  - limit: 5
+    modelId: 1000
   - material: SHULKER_BOX
     limit: 5
-    permission: 'somepermission.node'
+    # permission: 'somepermission.node' optionally add a permission for the limit

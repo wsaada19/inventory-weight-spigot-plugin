@@ -19,4 +19,4 @@ helpMessage:
   &7- &a/iw reload &f- Reload the plugin configuration.
 
   &eManage your inventory wisely to avoid slowing down or being unable to move!"
-overLimitMessage: '&cYou are carrying too many Shulker Boxes, you need to drop some!'
+overLimitMessage: '&cYou are carrying too much, you need to drop something!'

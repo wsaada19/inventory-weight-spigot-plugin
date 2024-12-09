@@ -1,5 +1,6 @@
 package me.wonka01.InventoryWeight.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -7,6 +8,7 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 
 import me.wonka01.InventoryWeight.playerweight.ItemLimit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +19,8 @@ public class InventoryCheckUtil {
     public static HashMap<String, Double> mapOfWeightsByMaterial = new HashMap<String, Double>();
     public static HashMap<String, Double> mapOfWeightsByDisplayName = new HashMap<String, Double>();
     public static HashMap<String, Double> mapOfWeightsByLore = new HashMap<String, Double>();
-    public static HashMap<String, ItemLimit> mapOfItemLimits = new HashMap<String, ItemLimit>();
+    public static HashMap<Integer, Double> mapOfWeightsByCustomModelId = new HashMap<Integer, Double>();
+    public static ArrayList<ItemLimit> mapOfItemLimits = new ArrayList<ItemLimit>();
     public static boolean armorOnlyMode = false;
     public static String loreTag = "";
     public static String capacityTag = "";
@@ -41,6 +44,18 @@ public class InventoryCheckUtil {
             for (ItemStack item : items) {
                 if (item == null) {
                     continue;
+                }
+
+                int customModelId = Items.getCustomModelData(item);
+
+                if (customModelId != -1) {
+                    String modelString = String.valueOf(customModelId);
+                    if (countMap.containsKey(modelString)) {
+                        countMap.put(modelString,
+                                countMap.get(modelString) + item.getAmount());
+                    } else {
+                        countMap.put(modelString, item.getAmount());
+                    }
                 }
 
                 if (countMap.containsKey(item.getType().toString())) {
@@ -77,23 +92,34 @@ public class InventoryCheckUtil {
         Map<String, Double> weightMap = new HashMap<String, Double>();
 
         Map<String, Integer> finalCountMap = new HashMap<String, Integer>();
-        mapOfItemLimits.forEach((key, value) -> {
+        mapOfItemLimits.forEach((value) -> {
+            String itemName = value.getMaterial();
+            String modelId = String.valueOf(value.getCustomModelId());
             countMap.forEach((key2, value2) -> {
-                if (key2.contains(key)) {
-                    if (finalCountMap.containsKey(key)) {
-                        finalCountMap.put(key, finalCountMap.get(key) + value2);
+                if (key2.contains(itemName)) {
+                    if (finalCountMap.containsKey(itemName)) {
+                        finalCountMap.put(itemName, finalCountMap.get(itemName) + value2);
                     } else {
-                        finalCountMap.put(key, value2);
+                        finalCountMap.put(itemName, value2);
+                    }
+                } else if (key2.equalsIgnoreCase(modelId)) {
+                    if (finalCountMap.containsKey(modelId)) {
+                        finalCountMap.put(modelId, finalCountMap.get(modelId) + value2);
+                    } else {
+                        finalCountMap.put(modelId, value2);
                     }
                 }
             });
         });
 
         finalCountMap.forEach((key, value) -> {
-            if (mapOfItemLimits.containsKey(key)) {
-                if (value > mapOfItemLimits.get(key).getLimit() && mapOfItemLimits.get(key).hasPermssion(player)) {
-                    weightMap.put("overLimit", 1.0);
-                    return;
+            for (ItemLimit itemLimit : mapOfItemLimits) {
+                if (itemLimit.getMaterial().contains(key)
+                        || key.contains(String.valueOf(itemLimit.getCustomModelId()))) {
+                    if (value > itemLimit.getLimit() && itemLimit.hasPermssion(player)) {
+                        weightMap.put("overLimit", 1.0);
+                        return;
+                    }
                 }
             }
         });
@@ -110,6 +136,12 @@ public class InventoryCheckUtil {
         String name = item.getItemMeta().getDisplayName();
         String type = item.getType().toString();
         String lore = "";
+        int modelId = Items.getCustomModelData(item);
+
+        if (modelId != -1 && mapOfWeightsByCustomModelId.containsKey(modelId)) {
+            return mapOfWeightsByCustomModelId.get(modelId);
+        }
+
         if (item.getItemMeta().hasLore()) {
             double weight = getWeightFromTag(item.getItemMeta().getLore());
             if (weight != 0) {

@@ -10,7 +10,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class GetWeightCommand implements SubCommand {
-    public void onCommand(Player player, String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "You must be a player to use this command"));
+            return;
+        }
+        Player player = (Player) sender;
+
         if (args.length < 2) {
             ItemStack item = player.getInventory().getItemInMainHand();
             if (item.getType() == Material.AIR) {
@@ -33,10 +39,6 @@ public class GetWeightCommand implements SubCommand {
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                     LanguageConfig.getConfig().getMessages().getItemWeight() + " " + weight));
         }
-    }
-
-    public void onCommand(CommandSender sender, String[] args) {
-        throw new NotImplementedException();
     }
 
 }
